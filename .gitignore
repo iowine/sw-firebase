@@ -1,0 +1,8 @@
+# Node Modules
+functions/node_modules
+
+# Firebase debug logs
+firebase-debug.log
+
+# Compiled TypeScript
+functions/*/*.js*
