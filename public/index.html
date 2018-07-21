@@ -44,8 +44,10 @@
 				// // The Firebase SDK is initialized and available here!
 				//
 				// firebase.auth().onAuthStateChanged(user => { });
-				firebase.app().database().ref('/data').once('value').then(snapshot => {
-					document.getElementById('data').innerHTML = JSON.stringify(snapshot)
+				firebase.app().database().ref('/data').on('value', snapshot => {
+					if (JSON.stringify(snapshot) != "null") {
+						document.getElementById('data').innerHTML = JSON.stringify(snapshot)
+					}
 				})
 				// firebase.messaging().requestPermission().then(() => { });
 				// firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
