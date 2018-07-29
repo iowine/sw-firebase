@@ -13,7 +13,7 @@ export const helloWorld = functions.https.onRequest((request, response) => {
  * 400 - DB Error.
  */
 export const pushData = functions.https.onRequest((request, response) => {
-    let data = {
+    const data = {
         time: Date.now(),
         data: request.body
     }
