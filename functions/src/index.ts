@@ -13,17 +13,13 @@ export const helloWorld = functions.https.onRequest((request, response) => {
  * 400 - DB Error.
  */
 export const pushData = functions.https.onRequest((request, response) => {
-    console.log(request)
-    console.log(response)
     const data = {
         time: Date.now(),
         data: request.body
     }
     admin.database().ref('/data').push(data).once('child_added').then(value => {
-        console.info(value)
         response.status(200).send(value)
     }, reason => {
-        console.error(reason)
         response.status(400).send(reason)
     })
 })
