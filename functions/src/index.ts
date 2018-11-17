@@ -3,8 +3,9 @@ import * as admin from 'firebase-admin'
 
 admin.initializeApp()
 
-export const helloWorld = functions.https.onRequest((request, response) => {
-    response.send("Hello from Firebase!")
+/** Heartbeat function */
+export const helloWorld = functions.https.onRequest((_, response) => {
+    response.send("Hello from IoWine!")
 })
 
 /**
@@ -13,15 +14,30 @@ export const helloWorld = functions.https.onRequest((request, response) => {
  * 400 - DB Error.
  */
 export const pushData = functions.https.onRequest((request, response) => {
+
+    /* Debug log request body */
+    console.log(request.body)
+
+    /* Put in raw data */
+    admin.database().ref('/raw').push(request.body)
+
+    /* Parse request */
+    const device = request.body.device
     const data = {
-        time: Date.now(),
-        data: request.body
+        time: request.body.time,
+        data: {
+            temperature: request.body.temperature,
+            humidity: request.body.humidity
+        }
     }
-    admin.database().ref('/data').push(data).once('child_added').then(value => {
+
+    /* Insert and return */
+    admin.database().ref(`/devices/${device}/data`).push(data).once('child_added').then(value => {
         response.status(200).send(value)
     }, reason => {
         response.status(400).send(reason)
     })
+    
 })
 
 /**
@@ -30,6 +46,7 @@ export const pushData = functions.https.onRequest((request, response) => {
  * 400 - DB Error.
  */
 export const getData = functions.https.onRequest((request, response) => {
+    console.log(request)
     admin.database().ref('/data').once('value').then(value => {
         response.status(200).send(value)
     }, reason => {
