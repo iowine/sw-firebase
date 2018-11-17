@@ -9,7 +9,13 @@
     ]
   },
   "hosting": {
-    "public": "public",
+    "public": "hosting/dist/iowine",
+    "rewrites": [
+      {
+        "source": "*",
+        "destination": "/index.html"
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",
