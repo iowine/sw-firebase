@@ -6,3 +6,6 @@ firebase-debug.log
 
 # Compiled TypeScript
 functions/*/*.js*
+
+# Logs
+*.log
