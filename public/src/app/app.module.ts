@@ -8,12 +8,14 @@ import { DeviceListComponent } from './device-list/device-list.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment } from 'src/environments/environment';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DeviceViewComponent,
-    DeviceListComponent
+    DeviceListComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
