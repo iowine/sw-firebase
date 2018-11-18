@@ -1,0 +1,5 @@
+<div class="container">
+    <li *ngFor="let data of deviceData | async">
+     {{ data.time }} - {{ data.data.temperature }}, {{ data.data.humidity }}
+    </li>
+  </div>
