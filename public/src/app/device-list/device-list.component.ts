@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 @Component({
   selector: 'app-device-list',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DeviceListComponent implements OnInit {
 
-  constructor() { }
+  public devices
+
+  constructor(db: AngularFireDatabase) {
+    this.devices = db.list('/devices')
+  }
 
   ngOnInit() {
+    
   }
 
 }

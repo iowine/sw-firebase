@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DeviceViewComponent } from './device-view/device-view.component';
 import { DeviceListComponent } from './device-list/device-list.component';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,8 @@ import { DeviceListComponent } from './device-list/device-list.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [],
   bootstrap: [AppComponent]
