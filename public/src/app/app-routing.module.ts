@@ -6,7 +6,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 
 const routes: Routes = [
   {
-    path: 'device',
+    path: 'device/:any',
     component: DeviceViewComponent
   },
   {

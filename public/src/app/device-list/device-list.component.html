@@ -1,5 +1,5 @@
 <div class="container">
   <li *ngFor="let device of devices | async">
-    {{ device.key }}
+    <a routerLink="/device/{{ device.key }}" routerLinkActive="active">{{ device.key }}</a>
   </li>
 </div>
