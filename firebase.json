@@ -9,7 +9,7 @@
     ]
   },
   "hosting": {
-    "public": "hosting/dist/iowine",
+    "public": "public/dist/iowine",
     "rewrites": [
       {
         "source": "*",
