@@ -1,5 +1,5 @@
 <div class="container">
-  <li *ngFor="let device of devices">
-    {{ device }}
+  <li *ngFor="let device of devices | async">
+    {{ device.key }}
   </li>
 </div>
