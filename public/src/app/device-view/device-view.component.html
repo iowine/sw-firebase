@@ -1,17 +1,15 @@
 <div class="container" *ngIf="deviceData | async as deviceData; else loading">
   <canvas baseChart
           [datasets]="temperatureData"
-          [labels]="chartLabels"
           [options]="temperatureOptions"
-          [legend]="chartLegend"
-          [chartType]="chartType">
+          [chartType]="chartType"
+          [colors]="temperatureColors">
   </canvas>
   <canvas baseChart
           [datasets]="humidityData"
-          [labels]="chartLabels"
           [options]="humidityOptions"
-          [legend]="chartLegend"
-          [chartType]="chartType">
+          [chartType]="chartType"
+          [colors]="humidityColors">
   </canvas>
 </div>
 <ng-template #loading>Loading device data...</ng-template>

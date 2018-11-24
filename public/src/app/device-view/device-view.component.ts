@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -18,10 +18,45 @@ export class DeviceViewComponent implements OnInit {
   device
   deviceData: Observable<any[]> = new Observable()
 
-  temperatureData = [{ data: [], label: 'Temperature' }]
-  humidityData = [{ data: [], label: 'Humidity' }]
   chartType = 'line'
   chartLabels = []
+
+  temperatureData = [{ 
+    data: [], 
+    label: 'Temperature'
+  }]
+  temperatureColors = [{
+    backgroundColor: 'rgba(219, 68, 55, 0.1)',
+    borderColor: 'rgba(219, 68, 55, 1.0)'
+  }]
+
+  humidityData = [{ 
+    data: [], 
+    label: 'Humidity'
+  }]
+  humidityColors = [{
+    backgroundColor: 'rgba(66,133,244, 0.1)',
+    borderColor: 'rgb(66,133,244, 1.0)'
+  }]
+
+  chartOptions = {
+    responsive: true,
+    scales: {
+      xAxes: [{
+        type: 'time',
+        time: {
+          unit: 'hour'
+        },
+        /* Vertical time */
+        ticks: {
+          maxRotation: 90,
+          minRotation: 90
+        }
+      }]
+    }
+  }
+  temperatureOptions = this.chartOptions
+  humidityOptions = this.chartOptions
 
   constructor(route: ActivatedRoute, db: AngularFireDatabase) {
     this.route = route
@@ -48,20 +83,40 @@ export class DeviceViewComponent implements OnInit {
     this.temperatureData[0].data.length = 0
     this.humidityData[0].data.length    = 0
     /* Limit incoming data */
-    data = data.slice(Math.max(data.length - 100, 1))
+    data = this.filterLastTime(data)
+    console.log(data)
     /* For every datapoint */
     data.forEach(dataPoint => {
       /* Add to temperature */
       this.temperatureData[0].data.push({
-        X: dataPoint.time,
+        x: dataPoint.time * 1000,
         y: dataPoint.data.temperature
       })
       /* Add to humidity */
       this.humidityData[0].data.push({
-        X: dataPoint.time,
+        x: dataPoint.time * 1000,
         y: dataPoint.data.humidity
       })
     })
+  }
+
+  /**
+   * Limits to data to a given cutoff time.
+   * E.g. show past <4> hours of data `filterLastTime(data, <4> * 60 ** 2)
+   * @param data 
+   * @param cutoff 
+   */
+  filterLastTime(data, cutoff = 4 * 60 ** 2) {
+    /* Get cutoff time */
+    let cutoffTime = new Date((data[data.length - 1].time - cutoff) * 1000)
+    /* Set up filtered array and loop backwards until cutoff */
+    let index = data.length - 1
+    let filteredData = []
+    while (index > 0) {
+      let latestTime = new Date(data[index].time * 1000)
+      if (latestTime < cutoffTime) return filteredData
+      filteredData.push(data[index--])
+    }
   }
 
 }
