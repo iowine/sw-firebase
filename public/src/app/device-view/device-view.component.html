@@ -1,5 +1,9 @@
-<div class="container">
-    <li *ngFor="let data of deviceData | async">
+<div class="container" *ngIf="deviceData | async as deviceData; else loading">
+  <ng-container *ngIf="deviceData.length; else noData">
+    <li *ngFor="let data of deviceData">
      {{ data.time }} - {{ data.data.temperature }}, {{ data.data.humidity }}
     </li>
-  </div>
+  </ng-container>
+  <ng-template #noData>No data yet!</ng-template>
+</div>
+<ng-template #loading>Loading device data...</ng-template>
