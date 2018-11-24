@@ -15,30 +15,14 @@ export class DeviceViewComponent implements OnInit {
   private db: AngularFireDatabase
 
   /** Front-end variables */
+  /* Device name */
   device
+  /* Device data observable */
   deviceData: Observable<any[]> = new Observable()
 
+  /* Global chart options */
   chartType = 'line'
   chartLabels = []
-
-  temperatureData = [{ 
-    data: [], 
-    label: 'Temperature'
-  }]
-  temperatureColors = [{
-    backgroundColor: 'rgba(219, 68, 55, 0.1)',
-    borderColor: 'rgba(219, 68, 55, 1.0)'
-  }]
-
-  humidityData = [{ 
-    data: [], 
-    label: 'Humidity'
-  }]
-  humidityColors = [{
-    backgroundColor: 'rgba(66,133,244, 0.1)',
-    borderColor: 'rgb(66,133,244, 1.0)'
-  }]
-
   chartOptions = {
     responsive: true,
     scales: {
@@ -55,8 +39,26 @@ export class DeviceViewComponent implements OnInit {
       }]
     }
   }
-  temperatureOptions = this.chartOptions
-  humidityOptions = this.chartOptions
+
+  /* Temperature chart options */
+  temperatureData = [{ 
+    data: [], 
+    label: 'Temperature'
+  }]
+  temperatureColors = [{
+    backgroundColor: 'rgba(219, 68, 55, 0.1)',
+    borderColor: 'rgba(219, 68, 55, 1.0)'
+  }]
+
+  /* Temperature chart options */
+  humidityData = [{ 
+    data: [], 
+    label: 'Humidity'
+  }]
+  humidityColors = [{
+    backgroundColor: 'rgba(66,133,244, 0.1)',
+    borderColor: 'rgb(66,133,244, 1.0)'
+  }]
 
   constructor(route: ActivatedRoute, db: AngularFireDatabase) {
     this.route = route
@@ -79,44 +81,50 @@ export class DeviceViewComponent implements OnInit {
   }
 
   update(data) {
-    /* Wipe existing data */
-    this.temperatureData[0].data.length = 0
-    this.humidityData[0].data.length    = 0
     /* Limit incoming data */
     data = this.filterLastTime(data)
-    console.log(data)
     /* For every datapoint */
+    let temperatureData = [{ 
+      data: [], 
+      label: 'Temperature'
+    }]
+    let humidityData = [{ 
+      data: [], 
+      label: 'Humidity'
+    }]
     data.forEach(dataPoint => {
       /* Add to temperature */
-      this.temperatureData[0].data.push({
+      temperatureData[0].data.push({
         x: dataPoint.time * 1000,
         y: dataPoint.data.temperature
       })
       /* Add to humidity */
-      this.humidityData[0].data.push({
+      humidityData[0].data.push({
         x: dataPoint.time * 1000,
         y: dataPoint.data.humidity
       })
     })
+    this.temperatureData = temperatureData
+    this.humidityData = humidityData
   }
 
   /**
    * Limits to data to a given cutoff time.
-   * E.g. show past <4> hours of data `filterLastTime(data, <4> * 60 ** 2)
+   *  e.g. show past <4> hours of data 
+   *  `filterLastTime(data, <4> [h] * 60 [min] ** 2 [s] * 1000 [ms])
    * @param data 
    * @param cutoff 
    */
-  filterLastTime(data, cutoff = 4 * 60 ** 2) {
+  filterLastTime(data, cutoff = 4 * 60 ** 2 * 1000) {
     /* Get cutoff time */
-    let cutoffTime = new Date((data[data.length - 1].time - cutoff) * 1000)
+    let cutoffTime = Date.now() - cutoff
     /* Set up filtered array and loop backwards until cutoff */
-    let index = data.length - 1
     let filteredData = []
-    while (index > 0) {
-      let latestTime = new Date(data[index].time * 1000)
-      if (latestTime < cutoffTime) return filteredData
-      filteredData.push(data[index--])
-    }
+    data.forEach(dataPoint => {
+      let latestTime = dataPoint.time * 1000
+      if (latestTime > cutoffTime) filteredData.push(dataPoint)
+    })
+    return filteredData.sort()
   }
 
 }
