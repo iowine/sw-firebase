@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-device-view',
@@ -11,26 +10,25 @@ import { map } from 'rxjs/operators';
 })
 export class DeviceViewComponent implements OnInit {
 
+  route: ActivatedRoute
+  db: AngularFireDatabase
+
   device
   deviceRef: AngularFireList<any>
   deviceData: Observable<any[]> = new Observable()
 
   constructor(route: ActivatedRoute, db: AngularFireDatabase) {
-    this.device = route.snapshot.params.device
-    
-    /* Get device ref */
-    this.deviceRef = db.list(`devices/${this.device}/data`)
-    /* Get observable of database */
-    //this.deviceData = this.deviceRef.snapshotChanges().pipe(
-    //  map(changes => 
-    //    changes.map(c => ({key: c.payload}))
-    //  )
-    //)
-    this.deviceData = this.deviceRef.valueChanges()
-    console.log(this.deviceData)
+    this.route = route
+    this.db = db
   }
 
   ngOnInit() {
+    /* Get device name */
+    this.device = this.route.snapshot.params.device
+    /* Get device ref */
+    this.deviceRef = this.db.list(`devices/${this.device}/data`)
+    /* Get observable of database */
+    this.deviceData = this.deviceRef.valueChanges()
   }
 
 }

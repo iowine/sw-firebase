@@ -16,9 +16,8 @@ const routes: Routes = [
     component: DeviceViewComponent
   },
   {
-    path: 'device-list',
-    component: DeviceListComponent,
-    data: { db : AngularFireDatabase }
+    path: 'devices',
+    component: DeviceListComponent
   }
 ];
 
