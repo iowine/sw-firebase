@@ -12,6 +12,7 @@ import { HomeComponent } from './home/home.component';
 import { ChartsModule } from 'ng2-charts';
 import { LoadingComponent } from './loading/loading.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { DeviceEditComponent } from './device-edit/device-edit.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     DeviceViewComponent,
     DeviceListComponent,
     HomeComponent,
-    LoadingComponent
+    LoadingComponent,
+    DeviceEditComponent
   ],
   imports: [
     BrowserModule,
