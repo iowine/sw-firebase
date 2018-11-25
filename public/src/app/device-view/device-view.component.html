@@ -1,5 +1,21 @@
-<div class="container">
-    <li *ngFor="let data of deviceData | async">
-     {{ data.time }} - {{ data.data.temperature }}, {{ data.data.humidity }}
-    </li>
-  </div>
+<div *ngIf="deviceData | async as deviceData; else loading">
+	<div class="row">
+		<canvas baseChart
+			[chartType]="chartType"
+			[options]="temperatureOptions"
+			[datasets]="temperatureData"
+			[colors]="temperatureColors">
+		</canvas>
+	</div>
+	<div class="row">
+		<canvas baseChart
+			[chartType]="chartType"
+			[options]="humidityOptions"
+			[datasets]="humidityData"
+			[colors]="humidityColors">
+		</canvas>
+	</div>
+</div>
+<ng-template #loading>
+	<app-loading></app-loading>
+</ng-template>

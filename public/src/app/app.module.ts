@@ -9,19 +9,27 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment } from 'src/environments/environment';
 import { HomeComponent } from './home/home.component';
+import { ChartsModule } from 'ng2-charts';
+import { LoadingComponent } from './loading/loading.component';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { DeviceEditComponent } from './device-edit/device-edit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DeviceViewComponent,
     DeviceListComponent,
-    HomeComponent
+    HomeComponent,
+    LoadingComponent,
+    DeviceEditComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    ChartsModule,
+    AngularFontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

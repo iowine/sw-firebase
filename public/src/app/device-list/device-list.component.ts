@@ -10,20 +10,24 @@ import { map } from 'rxjs/operators';
 })
 export class DeviceListComponent implements OnInit {
 
+  db: AngularFireDatabase
+
   devicesRef: AngularFireList<any>
   devices: Observable<any[]> = new Observable()
 
   constructor(db: AngularFireDatabase) {
+    this.db = db
+  }
+
+  ngOnInit() { 
     /* Get device ref */
-    this.devicesRef = db.list('devices')
-    /* Get observable of database */
+    this.devicesRef = this.db.list('devices')
+    /* Get device names */
     this.devices = this.devicesRef.snapshotChanges().pipe(
       map(changes => 
         changes.map(c => ({key: c.payload.key}))
       )
     )
   }
-
-  ngOnInit() { }
 
 }
