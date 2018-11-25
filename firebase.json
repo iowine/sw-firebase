@@ -12,7 +12,11 @@
     "public": "public/dist/iowine",
     "rewrites": [
       {
-        "source": "*",
+        "source": "/public/**",
+        "destination": "/public.html"
+      },
+      {
+        "source": "**",
         "destination": "/index.html"
       }
     ],
