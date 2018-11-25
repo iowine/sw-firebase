@@ -1,7 +1,7 @@
 import { ViewChild, Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
@@ -14,10 +14,12 @@ export class DeviceViewComponent implements OnInit {
   /** Back-end variables */
   private route: ActivatedRoute
   private db: AngularFireDatabase
+  private dataSubscriber: Subscription
+  private routeSubscriber: Subscription
 
   /** Front-end variables */
   /* Device name */
-  device
+  device: String
   /* Device data observable */
   deviceData: Observable<any[]> = new Observable()
 
@@ -76,18 +78,25 @@ export class DeviceViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    /* Get device name */
-    this.device = this.route.snapshot.params.device
-    /* Get device ref */
-    let deviceRef = this.db.list(`devices/${this.device}/data`)
-    /* Get observable of database */
-    this.deviceData = deviceRef.valueChanges()
-    /* Subscribe to deviceData */
-    this.deviceData.subscribe(data => {
-      this.update(data)
-    }, error => {
-      console.error(error)
+    /* Subscribe to route */
+    this.routeSubscriber = this.route.params.subscribe(params => {
+      /* Get device name */
+      this.device = params.device
+      /* Get device ref */
+      let deviceRef = this.db.list(`devices/${this.device}/data`)
+      /* Get observable of database */
+      this.deviceData = deviceRef.valueChanges()
+      /* Subscribe to deviceData */
+      this.dataSubscriber = this.deviceData.subscribe(data => {
+        this.update(data)
+      }, error => {
+        console.error(error)
+      })
     })
+  }
+  ngOnDestroy(): void {
+    this.routeSubscriber.unsubscribe()
+    this.dataSubscriber.unsubscribe()
   }
 
   update(data) {
@@ -114,6 +123,12 @@ export class DeviceViewComponent implements OnInit {
         y: dataPoint.data.humidity
       })
     })
+
+    /* Update data */
+    this.temperatureData = temperatureData
+    this.humidityData = humidityData
+    if (data.length < 2) return
+
     /* Update graph start/end */
     let temperatureOptions = this.temperatureOptions
     temperatureOptions.scales.xAxes[0].time.min = temperatureData[0].data[0].x
@@ -124,10 +139,6 @@ export class DeviceViewComponent implements OnInit {
     humidityOptions.scales.xAxes[0].time.min = humidityData[0].data[0].x
     humidityOptions.scales.xAxes[0].time.max = humidityData[0].data[temperatureData[0].data.length -1].x
     this.humidityOptions = humidityOptions
-
-    /* Update data */
-    this.temperatureData = temperatureData
-    this.humidityData = humidityData
   }
 
   /**

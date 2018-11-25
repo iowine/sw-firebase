@@ -16,7 +16,7 @@ const routes: Routes = [
     children: [
       {
         path: ':device',
-        component: DeviceViewComponent,
+        component: DeviceViewComponent
       },
       {
         path: ':device/edit',
