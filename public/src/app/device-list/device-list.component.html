@@ -1,4 +1,4 @@
-<div class="container" *ngIf="devices | async as devices; else loading">
+<div *ngIf="devices | async as devices; else loading">
   <ng-container *ngIf="devices.length; else noDevices">
     <li *ngFor="let device of devices">
       <a [routerLink]="['/device', device.key]" routerLinkActive="active">{{ device.key }}</a>

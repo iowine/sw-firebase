@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ViewChild, Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-device-view',
@@ -30,7 +31,9 @@ export class DeviceViewComponent implements OnInit {
       xAxes: [{
         type: 'time',
         time: {
-          unit: 'hour'
+          unit: 'hour',
+          min: undefined,
+          max: undefined
         },
         /* Vertical time */
         ticks: {
@@ -54,6 +57,7 @@ export class DeviceViewComponent implements OnInit {
     backgroundColor: 'rgba(219, 68, 55, 0.1)',
     borderColor: 'rgba(219, 68, 55, 1.0)'
   }]
+  temperatureOptions = this.chartOptions
 
   /* Temperature chart options */
   humidityData = [{ 
@@ -64,6 +68,7 @@ export class DeviceViewComponent implements OnInit {
     backgroundColor: 'rgba(66,133,244, 0.1)',
     borderColor: 'rgb(66,133,244, 1.0)'
   }]
+  humidityOptions = this.chartOptions
 
   constructor(route: ActivatedRoute, db: AngularFireDatabase) {
     this.route = route
@@ -109,6 +114,18 @@ export class DeviceViewComponent implements OnInit {
         y: dataPoint.data.humidity
       })
     })
+    /* Update graph start/end */
+    let temperatureOptions = this.temperatureOptions
+    temperatureOptions.scales.xAxes[0].time.min = temperatureData[0].data[0].x
+    temperatureOptions.scales.xAxes[0].time.max = temperatureData[0].data[temperatureData[0].data.length -1].x
+    this.temperatureOptions = temperatureOptions
+
+    let humidityOptions = this.humidityOptions
+    humidityOptions.scales.xAxes[0].time.min = humidityData[0].data[0].x
+    humidityOptions.scales.xAxes[0].time.max = humidityData[0].data[temperatureData[0].data.length -1].x
+    this.humidityOptions = humidityOptions
+
+    /* Update data */
     this.temperatureData = temperatureData
     this.humidityData = humidityData
   }
@@ -133,3 +150,36 @@ export class DeviceViewComponent implements OnInit {
   }
 
 }
+
+/**
+ * Frankenstien of a fix
+ * https://stackoverflow.com/questions/48905692/ng2-charts-chart-js-how-to-refresh-update-chart-angular-4
+ * https://github.com/valor-software/ng2-charts/issues/614
+ * https://github.com/valor-software/ng2-charts/issues/547
+ */
+BaseChartDirective.prototype.ngOnChanges = function (changes) {
+  if (this.initFlag) {
+      // Check if the changes are in the data or datasets
+      if (changes.hasOwnProperty('data') || changes.hasOwnProperty('datasets')) {
+          if (changes['data']) {
+              this.updateChartData(changes['data'].currentValue);
+          }
+          else {
+              this.updateChartData(changes['datasets'].currentValue);
+          }
+          // add label change detection every time
+          if (changes['labels']) { 
+              if (this.chart && this.chart.data && this.chart.data.labels) {
+                  this.chart.data.labels = changes['labels'].currentValue;    
+              }
+          }
+          if(changes['options']){
+            this.chart.options = changes['options'].currentValue
+          }
+          this.chart.update();
+      }
+      else {
+          // otherwise rebuild the chart
+          this.refresh();
+      }
+  }};
