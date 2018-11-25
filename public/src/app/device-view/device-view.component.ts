@@ -25,6 +25,7 @@ export class DeviceViewComponent implements OnInit {
   chartLabels = []
   chartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       xAxes: [{
         type: 'time',
@@ -37,7 +38,11 @@ export class DeviceViewComponent implements OnInit {
           minRotation: 90
         }
       }]
-    }
+    },
+    elements: { 
+      line: { tension: 0 },
+      point: { radius: 0 }
+    },
   }
 
   /* Temperature chart options */
