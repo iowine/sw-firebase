@@ -1,4 +1,4 @@
-<div *ngIf="deviceData | async as deviceData; else loading">
+<div class="row" *ngIf="deviceData | async as deviceData; else loading">
 	<!-- Graphs -->
 	<div class="col-10">
 		<div class="row">
@@ -20,14 +20,14 @@
 	</div>
 	<!-- Controls -->
 	<div class="col-2">
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last hour</a>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 6}">Last 6 hours</a>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 12}">Last 12 hours</a>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 24}">Last day</a>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last week</a>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last month</a>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last quarter</a>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last year</a>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last hour</a><br>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 6}">Last 6 hours</a><br>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 12}">Last 12 hours</a><br>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 24}">Last day</a><br>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 168}">Last week</a><br>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 720}">Last month</a><br>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 2160}">Last quarter</a><br>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 10950}">Last year</a><br>
 	</div>
 </div>
 <ng-template #loading>
