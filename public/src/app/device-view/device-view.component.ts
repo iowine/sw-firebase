@@ -1,4 +1,4 @@
-import { ViewChild, Component, OnInit } from '@angular/core';
+import { ViewChildren, Component, OnInit, QueryList } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -10,20 +10,26 @@ import { BaseChartDirective } from 'ng2-charts';
   styleUrls: ['./device-view.component.sass']
 })
 export class DeviceViewComponent implements OnInit {
+  @ViewChildren(BaseChartDirective)
+  public charts: QueryList<BaseChartDirective>
 
   /** Back-end variables */
   private route: ActivatedRoute
   private db: AngularFireDatabase
   private dataSubscriber: Subscription
-  private routeSubscriber: Subscription
+  private routeSubscriber: Subscription // For device
+  private querySubscriber: Subscription // For graph
 
   /** Front-end variables */
   /* Device name */
   device: String
+  /* How many hours to show */
+  lastHours
   /* Device data observable */
   deviceData: Observable<any[]> = new Observable()
 
   /* Global chart options */
+  rawData
   chartType = 'line'
   chartLabels = []
   chartOptions = {
@@ -44,6 +50,10 @@ export class DeviceViewComponent implements OnInit {
         }
       }]
     },
+    /* Performence */
+    animation: { duration: 0 },
+    hover: { animationDuration: 0 },
+    responsiveAnimationDuration: 0,
     elements: { 
       line: { tension: 0 },
       point: { radius: 0 }
@@ -78,6 +88,16 @@ export class DeviceViewComponent implements OnInit {
   }
 
   ngOnInit() {
+    /** Subscribe to query */
+    this.querySubscriber = this.route.queryParamMap.subscribe(queryParams => {
+      /* Get parameter */
+      let lastHours = Number(queryParams.get('scale'))
+      console.log(lastHours)
+      /* Ignore invalid variable */
+      this.lastHours = (lastHours > 0) ? lastHours : 4
+      /* Update graph */
+      if (this.rawData) this.update(this.rawData)
+    })
     /* Subscribe to route */
     this.routeSubscriber = this.route.params.subscribe(params => {
       /* Get device name */
@@ -100,6 +120,8 @@ export class DeviceViewComponent implements OnInit {
   }
 
   update(data) {
+    /* Save data */
+    this.rawData = data
     /* Limit incoming data */
     data = this.filterLastTime(data)
     /* For every datapoint */
@@ -130,15 +152,27 @@ export class DeviceViewComponent implements OnInit {
     if (data.length < 2) return
 
     /* Update graph start/end */
+    console.log(temperatureData, humidityData)
     let temperatureOptions = this.temperatureOptions
-    temperatureOptions.scales.xAxes[0].time.min = temperatureData[0].data[0].x
-    temperatureOptions.scales.xAxes[0].time.max = temperatureData[0].data[temperatureData[0].data.length -1].x
+    temperatureOptions.scales.xAxes[0].time.min = 
+      new Date(temperatureData[0].data[0].x)
+    temperatureOptions.scales.xAxes[0].time.max = 
+      new Date(temperatureData[0].data[temperatureData[0].data.length -1].x)
     this.temperatureOptions = temperatureOptions
 
     let humidityOptions = this.humidityOptions
-    humidityOptions.scales.xAxes[0].time.min = humidityData[0].data[0].x
-    humidityOptions.scales.xAxes[0].time.max = humidityData[0].data[temperatureData[0].data.length -1].x
+    humidityOptions.scales.xAxes[0].time.min = 
+      humidityData[0].data[0].x
+    humidityOptions.scales.xAxes[0].time.max = 
+      humidityData[0].data[humidityData[0].data.length -1].x
     this.humidityOptions = humidityOptions
+
+    console.log(this.charts)
+    this.charts.forEach(chart => {
+      chart.refresh()
+    })
+
+    console.log(temperatureOptions, humidityOptions)
   }
 
   /**
@@ -148,7 +182,10 @@ export class DeviceViewComponent implements OnInit {
    * @param data 
    * @param cutoff 
    */
-  filterLastTime(data, cutoff = 4 * 60 ** 2 * 1000) {
+  filterLastTime(data, cutoff = null) {
+    if (!cutoff) {
+      cutoff = this.lastHours * 60 ** 2 * 1000
+    }
     /* Get cutoff time */
     let cutoffTime = Date.now() - cutoff
     /* Set up filtered array and loop backwards until cutoff */
@@ -193,4 +230,5 @@ BaseChartDirective.prototype.ngOnChanges = function (changes) {
           // otherwise rebuild the chart
           this.refresh();
       }
-  }};
+  }
+};
