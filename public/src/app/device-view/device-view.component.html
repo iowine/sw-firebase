@@ -1,19 +1,33 @@
 <div *ngIf="deviceData | async as deviceData; else loading">
-	<div class="row">
-		<canvas baseChart
-			[chartType]="chartType"
-			[options]="temperatureOptions"
-			[datasets]="temperatureData"
-			[colors]="temperatureColors">
-		</canvas>
+	<!-- Graphs -->
+	<div class="col-10">
+		<div class="row">
+			<canvas baseChart
+				[chartType]="chartType"
+				[options]="temperatureOptions"
+				[datasets]="temperatureData"
+				[colors]="temperatureColors">
+			</canvas>
+		</div>
+		<div class="row">
+			<canvas baseChart
+				[chartType]="chartType"
+				[options]="humidityOptions"
+				[datasets]="humidityData"
+				[colors]="humidityColors">
+			</canvas>
+		</div>
 	</div>
-	<div class="row">
-		<canvas baseChart
-			[chartType]="chartType"
-			[options]="humidityOptions"
-			[datasets]="humidityData"
-			[colors]="humidityColors">
-		</canvas>
+	<!-- Controls -->
+	<div class="col-2">
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last hour</a>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 6}">Last 6 hours</a>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 12}">Last 12 hours</a>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 24}">Last day</a>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last week</a>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last month</a>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last quarter</a>
+		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last year</a>
 	</div>
 </div>
 <ng-template #loading>

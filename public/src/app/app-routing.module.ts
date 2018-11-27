@@ -19,6 +19,10 @@ const routes: Routes = [
         component: DeviceViewComponent
       },
       {
+        path: ':device/:scale',
+        component: DeviceViewComponent
+      },
+      {
         path: ':device/edit',
         component: DeviceEditComponent
       }
