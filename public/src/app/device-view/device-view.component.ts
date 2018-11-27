@@ -11,7 +11,7 @@ import { BaseChartDirective } from 'ng2-charts';
 })
 export class DeviceViewComponent implements OnInit {
   @ViewChildren(BaseChartDirective)
-  public charts: QueryList<BaseChartDirective>
+  private charts: QueryList<BaseChartDirective>
 
   /** Back-end variables */
   private route: ActivatedRoute
@@ -169,7 +169,9 @@ export class DeviceViewComponent implements OnInit {
 
     console.log(this.charts)
     this.charts.forEach(chart => {
-      chart.refresh()
+      // Hack TypeScript to make it work
+      // refresh is private but works regardless
+      (<any>chart).refresh()
     })
 
     console.log(temperatureOptions, humidityOptions)
