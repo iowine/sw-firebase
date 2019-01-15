@@ -103,9 +103,9 @@ export class DeviceViewComponent implements OnInit {
       /* Get device name */
       this.device = params.device
       /* Get device ref */
-      let deviceRef = this.db.list(`devices/${this.device}/data`)
+      let deviceRef = this.db.list(`devices/${this.device}/data`, ref => ref.orderByChild('time').limitToLast(this.lastHours)).valueChanges()
       /* Get observable of database */
-      this.deviceData = deviceRef.valueChanges()
+      this.deviceData = deviceRef
       /* Subscribe to deviceData */
       this.dataSubscriber = this.deviceData.subscribe(data => {
         this.update(data)
