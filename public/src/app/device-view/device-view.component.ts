@@ -116,6 +116,7 @@ export class DeviceViewComponent implements OnInit {
   }
   ngOnDestroy(): void {
     this.routeSubscriber.unsubscribe()
+    this.querySubscriber.unsubscribe()
     this.dataSubscriber.unsubscribe()
   }
 
