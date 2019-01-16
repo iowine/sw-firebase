@@ -153,27 +153,21 @@ export class DeviceViewComponent implements OnInit {
     if (data.length < 2) return
 
     /* Update graph start/end */
-    console.log(temperatureData, humidityData)
     let temperatureOptions = this.temperatureOptions
-    temperatureOptions.scales.xAxes[0].time.min = 
-      new Date(temperatureData[0].data[0].x)
-    temperatureOptions.scales.xAxes[0].time.max = 
-      new Date(temperatureData[0].data[temperatureData[0].data.length -1].x)
+    temperatureOptions.scales.xAxes[0].time.min = this.getCutoff()
+    temperatureOptions.scales.xAxes[0].time.max = Date.now()
     this.temperatureOptions = temperatureOptions
 
     let humidityOptions = this.humidityOptions
     humidityOptions.scales.xAxes[0].time.min = this.getCutoff()
-    humidityOptions.scales.xAxes[0].time.max = Date.now() * 1000
+    humidityOptions.scales.xAxes[0].time.max = Date.now()
     this.humidityOptions = humidityOptions
 
-    console.log(this.charts)
     this.charts.forEach(chart => {
       // Hack TypeScript to make it work
       // refresh is private but works regardless
       (<any>chart).refresh()
     })
-
-    console.log(temperatureOptions, humidityOptions)
   }
 
   /**
