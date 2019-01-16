@@ -20,14 +20,16 @@
 	</div>
 	<!-- Controls -->
 	<div class="col-2">
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last hour</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 6}">Last 6 hours</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 12}">Last 12 hours</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 24}">Last day</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 168}">Last week</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 720}">Last month</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 2160}">Last quarter</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 10950}">Last year</a><br>
+
+		<br>
+		<a [routerLink]="['/device', device]" [queryParamsHandling]="preserve" [queryParams]="{scale: 1}">Last hour</a><br>
+		<a [routerLink]="['/device', device]" [queryParamsHandling]="preserve" [queryParams]="{scale: 6}">Last 6 hours</a><br>
+		<a [routerLink]="['/device', device]" [queryParamsHandling]="preserve" [queryParams]="{scale: 12}">Last 12 hours</a><br>
+		<a [routerLink]="['/device', device]" [queryParamsHandling]="preserve" [queryParams]="{scale: 24}">Last day</a><br>
+		<a [routerLink]="['/device', device]" [queryParamsHandling]="preserve" [queryParams]="{scale: 168}">Last week</a><br>
+		<a [routerLink]="['/device', device]" [queryParamsHandling]="preserve" [queryParams]="{scale: 720}">Last month</a><br>
+		<a [routerLink]="['/device', device]" [queryParamsHandling]="preserve" [queryParams]="{scale: 2160}">Last quarter</a><br>
+		<a [routerLink]="['/device', device]" [queryParamsHandling]="preserve" [queryParams]="{scale: 10950}">Last year</a><br>
 	</div>
 </div>
 <ng-template #loading>
