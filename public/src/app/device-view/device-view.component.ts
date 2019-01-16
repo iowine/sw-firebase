@@ -24,12 +24,12 @@ export class DeviceViewComponent implements OnInit {
   /* Device name */
   device: String
   /* How many hours to show */
-  lastHours
+  lastHours: number
   /* Device data observable */
   deviceData: Observable<any[]> = new Observable()
 
   /* Global chart options */
-  rawData
+  rawData: any
   chartType = 'line'
   chartLabels = []
   chartOptions = {
@@ -162,10 +162,8 @@ export class DeviceViewComponent implements OnInit {
     this.temperatureOptions = temperatureOptions
 
     let humidityOptions = this.humidityOptions
-    humidityOptions.scales.xAxes[0].time.min = 
-      humidityData[0].data[0].x
-    humidityOptions.scales.xAxes[0].time.max = 
-      humidityData[0].data[humidityData[0].data.length -1].x
+    humidityOptions.scales.xAxes[0].time.min = this.getCutoff()
+    humidityOptions.scales.xAxes[0].time.max = Date.now() * 1000
     this.humidityOptions = humidityOptions
 
     console.log(this.charts)
@@ -186,18 +184,21 @@ export class DeviceViewComponent implements OnInit {
    * @param cutoff 
    */
   filterLastTime(data, cutoff = null) {
-    if (!cutoff) {
-      cutoff = this.lastHours * 60 ** 2 * 1000
-    }
-    /* Get cutoff time */
-    let cutoffTime = Date.now() - cutoff
     /* Set up filtered array and loop backwards until cutoff */
     let filteredData = []
     data.forEach(dataPoint => {
       let latestTime = dataPoint.time * 1000
-      if (latestTime > cutoffTime) filteredData.push(dataPoint)
+      if (latestTime > this.getCutoff(cutoff)) filteredData.push(dataPoint)
     })
     return filteredData.sort()
+  }
+  getCutoff(cutoff = null) {
+    if (!cutoff) {
+      cutoff = this.lastHours * 60 ** 2 * 1000
+    }
+    /* Get cutoff time */
+    return (Date.now() - cutoff)
+
   }
 
 }
