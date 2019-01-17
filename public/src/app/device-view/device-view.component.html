@@ -1,33 +1,55 @@
-<div class="row" *ngIf="deviceData | async as deviceData; else loading">
+<div class="col" *ngIf="deviceData | async as deviceData; else loading">
 	<!-- Graphs -->
-	<div class="col-10">
-		<div class="row">
-			<canvas baseChart
-				[chartType]="chartType"
-				[options]="temperatureOptions"
-				[datasets]="temperatureData"
-				[colors]="temperatureColors">
-			</canvas>
-		</div>
-		<div class="row">
-			<canvas baseChart
-				[chartType]="chartType"
-				[options]="humidityOptions"
-				[datasets]="humidityData"
-				[colors]="humidityColors">
-			</canvas>
-		</div>
+	<div class="row">
+		<canvas baseChart
+			height="350px"
+			[chartType]="chartType"
+			[options]="temperatureOptions"
+			[datasets]="temperatureData"
+			[colors]="temperatureColors">
+		</canvas>
 	</div>
-	<!-- Controls -->
-	<div class="col-2">
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 1}">Last hour</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 6}">Last 6 hours</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 12}">Last 12 hours</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 24}">Last day</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 168}">Last week</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 720}">Last month</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 2160}">Last quarter</a><br>
-		<a [routerLink]="['/device', device]" [queryParams]="{scale: 10950}">Last year</a><br>
+	<div class="row">
+		<canvas baseChart
+			height="350px"
+			[chartType]="chartType"
+			[options]="humidityOptions"
+			[datasets]="humidityData"
+			[colors]="humidityColors">
+		</canvas>
+	</div>
+	<div class="row controls">
+		<!-- Controls -->
+		<span class="hint">View: </span>
+		<button class="btn btn-light" 
+		[routerLink]="['/device', device]" 
+		[queryParams]="{ mode: 'standard' }"
+		queryParamsHandling="merge">
+			Standard
+		</button>
+		<button class="btn btn-light" 
+		[routerLink]="['/device', device]" 
+		[queryParams]="{ mode: '1stdiff' }"
+		queryParamsHandling="merge">
+			1st diff
+		</button>
+		<button class="btn btn-light" 
+		[routerLink]="['/device', device]" 
+		[queryParams]="{ mode: '2nddiff' }"
+		queryParamsHandling="merge">
+			2nd diff
+		</button>
+	</div>
+	<div class="row controls">
+		<!-- Controls -->
+		<span class="hint">Time: </span>
+		<button class="btn btn-light" 
+		[routerLink]="['/device', device]" 
+		[queryParams]="{ scale: scale.value }"
+		*ngFor="let scale of scales"
+		queryParamsHandling="merge">
+			Last {{ scale.text }}
+		</button>
 	</div>
 </div>
 <ng-template #loading>

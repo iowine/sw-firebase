@@ -1,13 +1,19 @@
 .device 
+    //Rounded corners
+    border-radius: 1em
+
+    //Whitespace
     margin-bottom: 1em
     padding: 2em
 
-    &:hover
-        background-color: #eeeeee
+    //No blue outline on focus
+    &:focus
+        outline: 0
 
-    a 
-        color: #000000
-        text-decoration: none
+    //Mouseover
+    &:hover
+        background-color: rgba(0, 0, 0, 0.05)
         
+//Clicked
 .active
-    background-color: #dddddd
+    background-color: rgba(0, 0, 0, 0.025)

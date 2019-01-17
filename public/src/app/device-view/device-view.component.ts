@@ -24,6 +24,15 @@ export class DeviceViewComponent implements OnInit {
   /* Device name */
   device: String
   /* How many hours to show */
+  private scales = [
+    { text: "hour",     value: 1 },
+    { text: "6 hours",  value: 6 },
+    { text: "12 hours", value: 12 },
+    { text: "day",      value: 24 },
+    { text: "week",     value: 168 },
+    { text: "month",    value: 720 }
+  ]
+
   lastHours: number
   /* Device data observable */
   deviceData: Observable<any[]> = new Observable()
