@@ -194,15 +194,15 @@ export class DeviceViewComponent implements OnInit {
     /* Calculate diff and update graph */
     switch (this.displayMode) {
       case '1stdiff':
-        this.setYScales(-1, 1)
+        this.setYScales('/s¹', -1, 1)
         this.update(this.getDiff(1, data))
         break
       case '2nddiff':
-        this.setYScales(-2, 2)
+        this.setYScales('/s²', -2, 2)
         this.update(this.getDiff(2, data))
         break
       default:
-        this.setYScales(15, 25, 40, 80)
+        this.setYScales('', 15, 25, 40, 80)
         this.update(data)
         break
     }
@@ -228,19 +228,28 @@ export class DeviceViewComponent implements OnInit {
     return data
   }
 
-  setYScales(tempLow: Number, tempHigh: Number, humLow: Number = null, humHigh: Number = null): void {
+  setYScales(suffix: String, 
+    tempLow: Number, tempHigh: Number, 
+    humLow: Number = null, humHigh: Number = null
+  ): void {
     humLow = humLow || tempLow
     humHigh = humHigh || tempHigh
     this.temperatureOptions.scales['yAxes'] = [{
       ticks: {
         suggestedMin: tempLow,
-        suggestedMax: tempHigh
+        suggestedMax: tempHigh,
+        callback: (value, index, values) => {
+          return `${value.toFixed(2)}${String.fromCharCode(176)}C${suffix}`
+        }
       }
     }]
     this.humidityOptions.scales['yAxes'] = [{
       ticks: {
         suggestedMin: humLow,
-        suggestedMax: humHigh
+        suggestedMax: humHigh,
+        callback: (value, index, values) => {
+          return `${value.toFixed(2)}%${suffix}`
+        }
       }
     }]
   }
