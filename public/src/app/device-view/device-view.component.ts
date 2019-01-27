@@ -25,7 +25,7 @@ export class DeviceViewComponent implements OnInit {
   /* Device name */
   device: String
   /* How many hours to show */
-  DEFAULT_CUTOFF = 1
+  DEFAULT_CUTOFF = 6
   private scales = [
     { text: "hour",     value: 1 },
     { text: "6 hours",  value: 6 },
