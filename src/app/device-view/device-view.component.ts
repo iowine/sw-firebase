@@ -194,11 +194,11 @@ export class DeviceViewComponent implements OnInit {
     /* Calculate diff and update graph */
     switch (this.displayMode) {
       case '1stdiff':
-        this.setYScales('/s¹', -1, 1)
+        this.setYScales('/ms¹', -1, 1)
         this.update(this.getDiff(1, data))
         break
       case '2nddiff':
-        this.setYScales('/s²', -2, 2)
+        this.setYScales('/ms²', -2, 2)
         this.update(this.getDiff(2, data))
         break
       default:
@@ -212,18 +212,23 @@ export class DeviceViewComponent implements OnInit {
   getDiff(diff, data) {
     data.forEach((dataPoint, index) => {
 
-      /* Skip last values */
+      /* Delete last values */
       if (index >= (data.length - diff)) {
         delete data[index]
         return
       }
 
-      /* Calculate diff */
-      data[index].data.temperature = 
-        data[index + diff].data.temperature - dataPoint.data.temperature
-      data[index].data.humidity = 
-        data[index + diff].data.humidity - dataPoint.data.humidity
+      /* Calculate time difference */
+      let timeDifference = data[index + diff].time - dataPoint.time
 
+      /* Calculate difference over time */
+      let temperatureDifference = data[index + diff].data.temperature - dataPoint.data.temperature
+      let humidityDifference = data[index + diff].data.humidity - dataPoint.data.humidity
+
+      /* Update values */
+      data[index].data.temperature = temperatureDifference * 1000 / timeDifference
+      data[index].data.humidity = humidityDifference * 1000 / timeDifference
+        
     })
     return data
   }
