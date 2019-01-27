@@ -1,5 +1,6 @@
 export const environment = {
-  production: true,
+  production: false,
+  name: 'IoWine Cloud',
   firebase: {
     apiKey: "AIzaSyCmcVwxlgJgLGZxynIUN4VaMaJf9Lhw3vg",
     authDomain: "iowine-cloud.firebaseapp.com",

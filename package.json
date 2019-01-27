@@ -2,6 +2,7 @@
   "name": "iowine",
   "version": "0.0.0",
   "scripts": {
+    "deploy": "ng build --prod && firebase deploy",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
