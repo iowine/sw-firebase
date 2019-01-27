@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   name: 'IoWine Cloud',
   version: require('../../package.json').version || "N/A",
   hash: require('../../git.version.json').raw || "N/A",
