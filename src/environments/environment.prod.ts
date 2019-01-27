@@ -1,6 +1,8 @@
 export const environment = {
   production: false,
   name: 'IoWine Cloud',
+  version: require('../../package.json').version || "N/A",
+  hash: require('../../git.version.json').raw || "N/A",
   firebase: {
     apiKey: "AIzaSyCmcVwxlgJgLGZxynIUN4VaMaJf9Lhw3vg",
     authDomain: "iowine-cloud.firebaseapp.com",
