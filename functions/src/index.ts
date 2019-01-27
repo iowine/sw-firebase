@@ -1,12 +1,8 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
+import { TIMEOUT } from 'dns';
 
 admin.initializeApp()
-
-/** Heartbeat function */
-export const helloWorld = functions.https.onRequest((_, response) => {
-    response.send("Hello from IoWine!")
-})
 
 /**
  * Attempts to insert body.
@@ -18,31 +14,48 @@ export const pushData = functions.https.onRequest((request, response) => {
     /* Parse request */
     const device = request.body.device
     const data = {
-        time: request.body.time,
+        time: Date.now() / 1000,
         data: {
+            time: request.body.time,
             temperature: request.body.temperature,
             humidity: request.body.humidity
         }
     }
 
-    /* Insert and return */
-    admin.database().ref(`/devices/${device}/data`).push(data).once('child_added').then(value => {
-        response.status(200).send(value)
-    }, reason => {
-        response.status(400).send(reason)
-    })
+    /* Update and insert data */
+    insertData(device, data)
+        .then(
+            _ => updateLatest(device, data),
+            reason => response.status(400).send(reason)
+        )
+        .then(
+            value => response.status(200).send(value),
+            reason => response.status(400).send(reason)
+        )
     
 })
 
-/**
- * Attempts to get and return data.
- * 200 - Success.
- * 400 - DB Error.
- */
-export const getData = functions.https.onRequest((request, response) => {
-    admin.database().ref('/data').once('value').then(value => {
-        response.status(200).send(value)
-    }, reason => {
-        response.status(400).send(reason)
+function updateLatest(device, data) {
+    return new Promise<any>((resolve, reject) => {
+        admin.database()
+            .ref(`/devices/${device}/latest`)
+            .set(data)
+            .then(
+                value => resolve(value),
+                reason => reject(reason)
+            )
     })
-})
+}
+
+function insertData(device, data) {
+    return new Promise<any>((resolve, reject) => {
+        admin.database()
+            .ref(`/devices/${device}/data`)
+            .push(data)
+            .once('child_added')
+            .then(
+                value => resolve(value),
+                reason => reject(reason)
+            )
+    })
+}

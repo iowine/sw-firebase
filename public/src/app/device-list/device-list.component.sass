@@ -1,0 +1,36 @@
+.device 
+    //Rounded corners
+    border-radius: 1em
+
+    //Whitespace
+    margin-bottom: 1em
+    padding: 2em
+
+    //No blue outline on focus
+    &:focus
+        outline: 0
+
+    //Mouseover
+    &:hover
+        background-color: rgba(0, 0, 0, 0.05)
+        
+//Clicked
+.active
+    background-color: rgba(0, 0, 0, 0.025)
+
+.edit 
+    text-decoration: none
+    color: rgba(0, 0, 0, 0.25)
+    transform: rotateZ(0deg)
+
+    transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72), transform 0.1s cubic-bezier(0.47, 0, 0.75, 0.72)
+    -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72), transform 0.1s cubic-bezier(0.47, 0, 0.75, 0.72)
+    -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72), transform 0.1s cubic-bezier(0.47, 0, 0.75, 0.72)
+    -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72), transform 0.1s cubic-bezier(0.47, 0, 0.75, 0.72)
+    -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72), transform 0.1s cubic-bezier(0.47, 0, 0.75, 0.72)
+
+    &:hover
+        color: rgba(0, 0, 0, 0.50)
+        transform: rotateZ(17deg)
+
+    

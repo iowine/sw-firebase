@@ -13,6 +13,7 @@ import { ChartsModule } from 'ng2-charts';
 import { LoadingComponent } from './loading/loading.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { DeviceEditComponent } from './device-edit/device-edit.component';
+import { TimeAgoPipe } from 'time-ago-pipe';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { DeviceEditComponent } from './device-edit/device-edit.component';
     DeviceListComponent,
     HomeComponent,
     LoadingComponent,
-    DeviceEditComponent
+    DeviceEditComponent,
+    TimeAgoPipe
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,9 @@
-import { ViewChild, Component, OnInit } from '@angular/core';
+import { ViewChildren, Component, OnInit, QueryList } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { BaseChartDirective } from 'ng2-charts';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-device-view',
@@ -10,20 +11,35 @@ import { BaseChartDirective } from 'ng2-charts';
   styleUrls: ['./device-view.component.sass']
 })
 export class DeviceViewComponent implements OnInit {
+  @ViewChildren(BaseChartDirective)
+  private charts: QueryList<BaseChartDirective>
 
   /** Back-end variables */
   private route: ActivatedRoute
   private db: AngularFireDatabase
   private dataSubscriber: Subscription
-  private routeSubscriber: Subscription
+  private routeSubscriber: Subscription // For device
+  private querySubscriber: Subscription // For graph
 
   /** Front-end variables */
   /* Device name */
   device: String
-  /* Device data observable */
+  /* How many hours to show */
+  DEFAULT_CUTOFF = 1
+  private scales = [
+    { text: "hour",     value: 1 },
+    { text: "6 hours",  value: 6 },
+    { text: "12 hours", value: 12 },
+    { text: "day",      value: 24 },
+    { text: "week",     value: 168 },
+    { text: "month",    value: 720 }
+  ]
+  /* Device data observable required to show graph */
   deviceData: Observable<any[]> = new Observable()
+  lastHours: number
 
   /* Global chart options */
+  rawData: any
   chartType = 'line'
   chartLabels = []
   chartOptions = {
@@ -44,6 +60,10 @@ export class DeviceViewComponent implements OnInit {
         }
       }]
     },
+    /* Performence */
+    animation: { duration: 0 },
+    hover: { animationDuration: 0 },
+    responsiveAnimationDuration: 0,
     elements: { 
       line: { tension: 0 },
       point: { radius: 0 }
@@ -78,17 +98,27 @@ export class DeviceViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    /* Subscribe to route */
+    /* Subscribe to query (scale update) */
+    this.querySubscriber = this.route.queryParamMap.subscribe(queryParams => {
+      /* Get parameter */
+      let lastHours = Number(queryParams.get('scale'))
+      /* Ignore invalid variable */
+      this.lastHours = (lastHours > 0) ? lastHours : this.DEFAULT_CUTOFF
+      /* Update graph */
+      if (this.rawData) this.filterUpdate(this.rawData)
+    })
+    /* Subscribe to route (device update) */
     this.routeSubscriber = this.route.params.subscribe(params => {
-      /* Get device name */
+      /* Get new device's name */
       this.device = params.device
-      /* Get device ref */
-      let deviceRef = this.db.list(`devices/${this.device}/data`)
-      /* Get observable of database */
-      this.deviceData = deviceRef.valueChanges()
-      /* Subscribe to deviceData */
+      /* Get new devices' ref */
+      this.deviceData = this.db.list(
+        `devices/${this.device}/data`, 
+        ref => ref.orderByChild('time')
+      ).valueChanges()
+      /* Subscribe to new device's data */
       this.dataSubscriber = this.deviceData.subscribe(data => {
-        this.update(data)
+        this.filterUpdate(data)
       }, error => {
         console.error(error)
       })
@@ -96,12 +126,26 @@ export class DeviceViewComponent implements OnInit {
   }
   ngOnDestroy(): void {
     this.routeSubscriber.unsubscribe()
+    this.querySubscriber.unsubscribe()
     this.dataSubscriber.unsubscribe()
   }
 
+  filterUpdate(data) {
+    /* Save data */
+    this.rawData = data
+    /* Cutoff is in ms */
+    let cutoff = this.getCutoff() / 1000
+    /* +1h to show data before graph start */
+    cutoff -= 60 ** 2
+    /* Filter recent data */
+    data = _.filter(data, o => {
+      return (<any>o).time > cutoff
+    })
+    /* Update graph */
+    this.update(data)
+  }
+
   update(data) {
-    /* Limit incoming data */
-    data = this.filterLastTime(data)
     /* For every datapoint */
     let temperatureData = [{ 
       data: [], 
@@ -131,33 +175,34 @@ export class DeviceViewComponent implements OnInit {
 
     /* Update graph start/end */
     let temperatureOptions = this.temperatureOptions
-    temperatureOptions.scales.xAxes[0].time.min = temperatureData[0].data[0].x
-    temperatureOptions.scales.xAxes[0].time.max = temperatureData[0].data[temperatureData[0].data.length -1].x
+    temperatureOptions.scales.xAxes[0].time.min = new Date(this.getCutoff())
+    temperatureOptions.scales.xAxes[0].time.max = Date.now()
     this.temperatureOptions = temperatureOptions
 
     let humidityOptions = this.humidityOptions
-    humidityOptions.scales.xAxes[0].time.min = humidityData[0].data[0].x
-    humidityOptions.scales.xAxes[0].time.max = humidityData[0].data[temperatureData[0].data.length -1].x
+    humidityOptions.scales.xAxes[0].time.min = new Date(this.getCutoff())
+    humidityOptions.scales.xAxes[0].time.max = Date.now()
     this.humidityOptions = humidityOptions
+
+    this.charts.forEach(chart => {
+      // Hack TypeScript to make it work
+      // refresh is private but works regardless
+      (<any>chart).refresh()
+    })
   }
 
   /**
-   * Limits to data to a given cutoff time.
+   * Returns Date object for cutoff.
    *  e.g. show past <4> hours of data 
-   *  `filterLastTime(data, <4> [h] * 60 [min] ** 2 [s] * 1000 [ms])
-   * @param data 
+   *  `getCutoff(<4> [h] * 60 [min] ** 2 [s] * 1000 [ms])
    * @param cutoff 
    */
-  filterLastTime(data, cutoff = 4 * 60 ** 2 * 1000) {
+  getCutoff(cutoff = null) {
+    /* Value fallbacks */
+    cutoff = cutoff || this.lastHours || this.DEFAULT_CUTOFF
+    cutoff *= 60 ** 2 * 1000
     /* Get cutoff time */
-    let cutoffTime = Date.now() - cutoff
-    /* Set up filtered array and loop backwards until cutoff */
-    let filteredData = []
-    data.forEach(dataPoint => {
-      let latestTime = dataPoint.time * 1000
-      if (latestTime > cutoffTime) filteredData.push(dataPoint)
-    })
-    return filteredData.sort()
+    return Date.now() - cutoff
   }
 
 }
@@ -193,4 +238,5 @@ BaseChartDirective.prototype.ngOnChanges = function (changes) {
           // otherwise rebuild the chart
           this.refresh();
       }
-  }};
+  }
+};

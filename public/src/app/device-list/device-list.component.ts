@@ -23,11 +23,7 @@ export class DeviceListComponent implements OnInit {
     /* Get device ref */
     this.devicesRef = this.db.list('devices')
     /* Get device names */
-    this.devices = this.devicesRef.snapshotChanges().pipe(
-      map(changes => 
-        changes.map(c => ({key: c.payload.key}))
-      )
-    )
+    this.devices = this.devicesRef.snapshotChanges()
   }
 
 }
