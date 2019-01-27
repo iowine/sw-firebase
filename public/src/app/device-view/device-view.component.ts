@@ -107,6 +107,17 @@ export class DeviceViewComponent implements OnInit {
       let lastHours = Number(queryParams.get('scale'))
       /* Ignore invalid variable */
       this.lastHours = (lastHours > 0) ? lastHours : this.DEFAULT_CUTOFF
+      /* Adjust x axis labels */
+      if (this.lastHours > 24) {
+        this.temperatureOptions.scales.xAxes[0].time.unit = 'day'
+        this.humidityOptions.scales.xAxes[0].time.unit = 'day'
+      } else if (this.lastHours <= 1) {
+        this.temperatureOptions.scales.xAxes[0].time.unit = 'minute'
+        this.humidityOptions.scales.xAxes[0].time.unit = 'minute'
+      } else {
+        this.temperatureOptions.scales.xAxes[0].time.unit = 'hour'
+        this.humidityOptions.scales.xAxes[0].time.unit = 'hour'
+      }
       /* Update graph */
       if (this.rawData) this.filterUpdate(this.rawData)
     })
