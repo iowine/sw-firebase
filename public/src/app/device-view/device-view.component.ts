@@ -79,7 +79,8 @@ export class DeviceViewComponent implements OnInit {
     backgroundColor: 'rgba(219, 68, 55, 0.1)',
     borderColor: 'rgba(219, 68, 55, 1.0)'
   }]
-  temperatureOptions = this.chartOptions
+  /* Deep copy chart options */
+  temperatureOptions = JSON.parse(JSON.stringify(this.chartOptions))
 
   /* Temperature chart options */
   humidityData = [{ 
@@ -90,7 +91,8 @@ export class DeviceViewComponent implements OnInit {
     backgroundColor: 'rgba(66,133,244, 0.1)',
     borderColor: 'rgb(66,133,244, 1.0)'
   }]
-  humidityOptions = this.chartOptions
+  /* Deep copy chart options */
+  humidityOptions = JSON.parse(JSON.stringify(this.chartOptions))
 
   constructor(route: ActivatedRoute, db: AngularFireDatabase) {
     this.route = route
@@ -98,6 +100,7 @@ export class DeviceViewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setupGraphs()
     /* Subscribe to query (scale update) */
     this.querySubscriber = this.route.queryParamMap.subscribe(queryParams => {
       /* Get parameter */
@@ -128,6 +131,21 @@ export class DeviceViewComponent implements OnInit {
     this.routeSubscriber.unsubscribe()
     this.querySubscriber.unsubscribe()
     this.dataSubscriber.unsubscribe()
+  }
+
+  setupGraphs() {
+    this.temperatureOptions.scales['yAxes'] = [{
+      ticks: {
+        suggestedMin: 15,
+        suggestedMax: 25
+      }
+    }]
+    this.humidityOptions.scales['yAxes'] = [{
+      ticks: {
+        suggestedMin: 40,
+        suggestedMax: 80
+      }
+    }]
   }
 
   filterUpdate(data) {
