@@ -1,6 +1,6 @@
 {
   "name": "iowine",
-  "version": "1.10.0",
+  "version": "1.10.3",
   "scripts": {
     "deploy": "node ./git.version.js && ng build --prod && firebase deploy",
     "ng": "ng",
