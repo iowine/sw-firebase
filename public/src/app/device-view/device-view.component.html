@@ -23,21 +23,10 @@
 		<span class="hint">View: </span>
 		<button class="btn btn-light" 
 		[routerLink]="['/device', device]" 
-		[queryParams]="{ mode: 'standard' }"
+		[queryParams]="{ mode: mode.value }"
+		*ngFor="let mode of modes"
 		queryParamsHandling="merge">
-			Standard
-		</button>
-		<button class="btn btn-light" 
-		[routerLink]="['/device', device]" 
-		[queryParams]="{ mode: '1stdiff' }"
-		queryParamsHandling="merge">
-			1st diff
-		</button>
-		<button class="btn btn-light" 
-		[routerLink]="['/device', device]" 
-		[queryParams]="{ mode: '2nddiff' }"
-		queryParamsHandling="merge">
-			2nd diff
+			{{ mode.text }} Mode
 		</button>
 	</div>
 	<div class="row controls">
