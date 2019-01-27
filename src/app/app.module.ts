@@ -15,6 +15,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { DeviceEditComponent } from './device-edit/device-edit.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { PwaComponent } from './pwa/pwa.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     HomeComponent,
     LoadingComponent,
     DeviceEditComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    PwaComponent
   ],
   imports: [
     BrowserModule,
