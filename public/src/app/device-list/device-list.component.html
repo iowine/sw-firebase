@@ -2,12 +2,18 @@
   <div class="col-sm-4" >
     <ng-container *ngIf="devices.length; else noDevices">
       <div class="device" *ngFor="let device of devices" [routerLink]="['/device', device.key]"  routerLinkActive="active">
-        <h2>{{ device.key }}</h2>
+        <h2>
+          {{ device.key }}
+          <a class="edit pull-right" [routerLink]="['/edit', device.key]"  >
+            <fa name="cog"></fa>
+          </a>
+        </h2>
         <section>
           Last seen: 
           {{ device.payload.val().latest.time * 1000 | timeAgo }}
         </section>
         <section>
+          Last data:
           {{ device.payload.val().latest.data.temperature.toFixed(2) }}&deg;C /
           {{ device.payload.val().latest.data.humidity.toFixed(2) }}%
         </section>
