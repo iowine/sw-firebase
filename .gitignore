@@ -9,3 +9,6 @@ functions/*/*.js*
 
 # Logs
 *.log
+
+# Deploys
+.firebase
