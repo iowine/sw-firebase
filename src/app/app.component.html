@@ -14,9 +14,17 @@
       <li class="nav-item">
         <a routerLink="/device" routerLinkActive="active" class="nav-link" >Devices</a>
       </li>
+      <li class="nav-item">
+        <app-pwa></app-pwa>
+      </li>
     </ul>
   </div>
 </nav>
 <div class="container">
     <router-outlet></router-outlet>
+    <footer class="footer">
+      <div class="container">
+        <span class="text-muted">{{ title }}, v{{ version }}-{{ hash }}</span>
+      </div>
+    </footer>
 </div>

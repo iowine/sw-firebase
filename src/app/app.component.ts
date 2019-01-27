@@ -7,8 +7,14 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent { 
+  
   title
+  version
+  hash
+
   constructor() {
     this.title = environment.name
+    this.version = environment.version
+    this.hash = environment.hash
   }
 }

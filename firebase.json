@@ -9,12 +9,8 @@
     ]
   },
   "hosting": {
-    "public": "public/dist/iowine",
+    "public": "dist/iowine",
     "rewrites": [
-      {
-        "source": "/public/**",
-        "destination": "/public.html"
-      },
       {
         "source": "**",
         "destination": "/index.html"

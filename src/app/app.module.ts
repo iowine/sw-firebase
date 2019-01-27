@@ -14,6 +14,8 @@ import { LoadingComponent } from './loading/loading.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { DeviceEditComponent } from './device-edit/device-edit.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { PwaComponent } from './pwa/pwa.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { TimeAgoPipe } from 'time-ago-pipe';
     HomeComponent,
     LoadingComponent,
     DeviceEditComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    PwaComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +34,8 @@ import { TimeAgoPipe } from 'time-ago-pipe';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     ChartsModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
