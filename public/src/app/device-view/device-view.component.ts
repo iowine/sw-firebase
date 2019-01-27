@@ -3,6 +3,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { BaseChartDirective } from 'ng2-charts';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-device-view',
@@ -24,6 +25,7 @@ export class DeviceViewComponent implements OnInit {
   /* Device name */
   device: String
   /* How many hours to show */
+  DEFAULT_CUTOFF = 1
   private scales = [
     { text: "hour",     value: 1 },
     { text: "6 hours",  value: 6 },
@@ -32,10 +34,9 @@ export class DeviceViewComponent implements OnInit {
     { text: "week",     value: 168 },
     { text: "month",    value: 720 }
   ]
-
-  lastHours: number
-  /* Device data observable */
+  /* Device data observable required to show graph */
   deviceData: Observable<any[]> = new Observable()
+  lastHours: number
 
   /* Global chart options */
   rawData: any
@@ -97,27 +98,27 @@ export class DeviceViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    /** Subscribe to query */
+    /* Subscribe to query (scale update) */
     this.querySubscriber = this.route.queryParamMap.subscribe(queryParams => {
       /* Get parameter */
       let lastHours = Number(queryParams.get('scale'))
-      console.log(lastHours)
       /* Ignore invalid variable */
-      this.lastHours = (lastHours > 0) ? lastHours : 4
+      this.lastHours = (lastHours > 0) ? lastHours : this.DEFAULT_CUTOFF
       /* Update graph */
-      if (this.rawData) this.update(this.rawData)
+      if (this.rawData) this.filterUpdate(this.rawData)
     })
-    /* Subscribe to route */
+    /* Subscribe to route (device update) */
     this.routeSubscriber = this.route.params.subscribe(params => {
-      /* Get device name */
+      /* Get new device's name */
       this.device = params.device
-      /* Get device ref */
-      let deviceRef = this.db.list(`devices/${this.device}/data`, ref => ref.orderByChild('time').limitToLast(this.lastHours)).valueChanges()
-      /* Get observable of database */
-      this.deviceData = deviceRef
-      /* Subscribe to deviceData */
+      /* Get new devices' ref */
+      this.deviceData = this.db.list(
+        `devices/${this.device}/data`, 
+        ref => ref.orderByChild('time')
+      ).valueChanges()
+      /* Subscribe to new device's data */
       this.dataSubscriber = this.deviceData.subscribe(data => {
-        this.update(data)
+        this.filterUpdate(data)
       }, error => {
         console.error(error)
       })
@@ -129,11 +130,22 @@ export class DeviceViewComponent implements OnInit {
     this.dataSubscriber.unsubscribe()
   }
 
-  update(data) {
+  filterUpdate(data) {
     /* Save data */
     this.rawData = data
-    /* Limit incoming data */
-    data = this.filterLastTime(data)
+    /* Cutoff is in ms */
+    let cutoff = this.getCutoff() / 1000
+    /* +1h to show data before graph start */
+    cutoff -= 60 ** 2
+    /* Filter recent data */
+    data = _.filter(data, o => {
+      return (<any>o).time > cutoff
+    })
+    /* Update graph */
+    this.update(data)
+  }
+
+  update(data) {
     /* For every datapoint */
     let temperatureData = [{ 
       data: [], 
@@ -163,12 +175,12 @@ export class DeviceViewComponent implements OnInit {
 
     /* Update graph start/end */
     let temperatureOptions = this.temperatureOptions
-    temperatureOptions.scales.xAxes[0].time.min = this.getCutoff()
+    temperatureOptions.scales.xAxes[0].time.min = new Date(this.getCutoff())
     temperatureOptions.scales.xAxes[0].time.max = Date.now()
     this.temperatureOptions = temperatureOptions
 
     let humidityOptions = this.humidityOptions
-    humidityOptions.scales.xAxes[0].time.min = this.getCutoff()
+    humidityOptions.scales.xAxes[0].time.min = new Date(this.getCutoff())
     humidityOptions.scales.xAxes[0].time.max = Date.now()
     this.humidityOptions = humidityOptions
 
@@ -180,28 +192,17 @@ export class DeviceViewComponent implements OnInit {
   }
 
   /**
-   * Limits to data to a given cutoff time.
+   * Returns Date object for cutoff.
    *  e.g. show past <4> hours of data 
-   *  `filterLastTime(data, <4> [h] * 60 [min] ** 2 [s] * 1000 [ms])
-   * @param data 
+   *  `getCutoff(<4> [h] * 60 [min] ** 2 [s] * 1000 [ms])
    * @param cutoff 
    */
-  filterLastTime(data, cutoff = null) {
-    /* Set up filtered array and loop backwards until cutoff */
-    let filteredData = []
-    data.forEach(dataPoint => {
-      let latestTime = dataPoint.time * 1000
-      if (latestTime > this.getCutoff(cutoff)) filteredData.push(dataPoint)
-    })
-    return filteredData.sort()
-  }
   getCutoff(cutoff = null) {
-    if (!cutoff) {
-      cutoff = this.lastHours * 60 ** 2 * 1000
-    }
+    /* Value fallbacks */
+    cutoff = cutoff || this.lastHours || this.DEFAULT_CUTOFF
+    cutoff *= 60 ** 2 * 1000
     /* Get cutoff time */
-    return (Date.now() - cutoff)
-
+    return Date.now() - cutoff
   }
 
 }
