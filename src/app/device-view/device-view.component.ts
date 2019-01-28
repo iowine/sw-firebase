@@ -194,11 +194,11 @@ export class DeviceViewComponent implements OnInit {
     /* Calculate diff and update graph */
     switch (this.displayMode) {
       case '1stdiff':
-        this.setYScales('/ms¹', -1, 1)
+        this.setYScales('/min¹', -0.5, 0.5)
         this.update(this.getDiff(1, data))
         break
       case '2nddiff':
-        this.setYScales('/ms²', -2, 2)
+        this.setYScales('/min²', -0.05, 0.05)
         this.update(this.getDiff(2, data))
         break
       default:
@@ -209,28 +209,53 @@ export class DeviceViewComponent implements OnInit {
 
   }
 
+  /**
+   * Recursively calculates difference.
+   * @param diff 
+   * @param data 
+   */
   getDiff(diff, data) {
+
+    /* Base case if no difference */
+    if (diff < 1) return data
+
+    /* Calculate difference by looping over */
     data.forEach((dataPoint, index) => {
 
-      /* Delete last values */
-      if (index >= (data.length - diff)) {
-        delete data[index]
+      /* Delete last value */
+      if (index >= (data.length - 1)) {
+        data.pop()
         return
       }
 
-      /* Calculate time difference */
-      let timeDifference = data[index + diff].time - dataPoint.time
+      /* Get references */
+      let nextPoint = data[index + 1]
+
+      /* Calculate time difference in minutes */
+      let timeDifference = (nextPoint.time - dataPoint.time) / 60
 
       /* Calculate difference over time */
-      let temperatureDifference = data[index + diff].data.temperature - dataPoint.data.temperature
-      let humidityDifference = data[index + diff].data.humidity - dataPoint.data.humidity
+      let temperatureDifference = nextPoint.data.temperature
+        - dataPoint.data.temperature
+      let humidityDifference    = nextPoint.data.humidity
+        - dataPoint.data.humidity
+      
+      /* 
+        Calculate change 
+          diff = d value / d time
+      */
+      let temperatureChange = temperatureDifference / timeDifference
+      let humidityChange    = humidityDifference / timeDifference
 
       /* Update values */
-      data[index].data.temperature = temperatureDifference * 1000 / timeDifference
-      data[index].data.humidity = humidityDifference * 1000 / timeDifference
+      data[index].data.temperature  = temperatureChange
+      data[index].data.humidity     = humidityChange
         
     })
-    return data
+
+    /* Recursively return */
+    return this.getDiff(--diff, data)
+
   }
 
   setYScales(suffix: String, 
