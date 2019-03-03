@@ -15,17 +15,13 @@ const routes: Routes = [
     component: DeviceListComponent,
     children: [
       {
-        path: ':device',
-        component: DeviceViewComponent
-      },
-      {
-        path: ':device/:scale',
-        component: DeviceViewComponent
-      },
-      {
-        path: ':device/edit',
+        path: 'edit/:device',
         component: DeviceEditComponent
-      }
+      },
+      {
+        path: 'view/:device',
+        component: DeviceViewComponent
+      },
     ]
   }
 ];
