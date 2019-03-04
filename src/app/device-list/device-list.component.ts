@@ -26,4 +26,8 @@ export class DeviceListComponent implements OnInit {
     this.devices = this.devicesRef.snapshotChanges()
   }
 
+  stop(event: Event) {
+    event.stopPropagation()
+  }
+
 }

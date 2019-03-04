@@ -22,7 +22,7 @@
 		<!-- Controls -->
 		<span class="hint">View: </span>
 		<button class="btn btn-light" 
-		[routerLink]="['/device', device]" 
+		[routerLink]="['/device/view', device]" 
 		[queryParams]="{ mode: mode.value }"
 		*ngFor="let mode of modes"
 		queryParamsHandling="merge">
@@ -33,7 +33,7 @@
 		<!-- Controls -->
 		<span class="hint">Time: </span>
 		<button class="btn btn-light" 
-		[routerLink]="['/device', device]" 
+		[routerLink]="['/device/view', device]" 
 		[queryParams]="{ scale: scale.value }"
 		*ngFor="let scale of scales"
 		queryParamsHandling="merge">

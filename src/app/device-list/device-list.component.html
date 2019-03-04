@@ -1,21 +1,27 @@
 <div class="row" *ngIf="devices | async as devices; else loading">
   <div class="col-sm-4" >
     <ng-container *ngIf="devices.length; else noDevices">
-      <div class="device" *ngFor="let device of devices" [routerLink]="['/device', device.key]"  routerLinkActive="active">
+      <div class="device" *ngFor="let device of devices" [routerLink]="['view', device.key]"  routerLinkActive="active">
         <h2>
-          {{ device.key }}
-          <a class="edit pull-right" [routerLink]="['/edit', device.key]"  >
+          {{ device.payload.val().name || device.key }}
+          <a class="edit pull-right" [routerLink]="['edit', device.key]" (click)="stop($event)"  >
             <fa name="cog"></fa>
           </a>
         </h2>
         <section>
-          Last seen: 
-          {{ device.payload.val().latest.time * 1000 | timeAgo }}
+          {{ device.payload.val().desc  }}
         </section>
         <section>
-          Last data:
-          {{ device.payload.val().latest.data.temperature.toFixed(2) }}&deg;C /
-          {{ device.payload.val().latest.data.humidity.toFixed(2) }}%
+          <small>
+            Last seen: 
+            {{ device.payload.val().latest.time * 1000 | timeAgo }}
+          </small>
+          <br>
+          <small>
+            Last data:
+            {{ device.payload.val().latest.data.temperature.toFixed(2) }}&deg;C /
+            {{ device.payload.val().latest.data.humidity.toFixed(2) }}%
+          </small>
         </section>
       </div>
     </ng-container>
