@@ -9,6 +9,9 @@
         },
         "desc": {
           ".write": true
+        },
+        "alerts": {
+          ".write": true
         }
       }
     }
