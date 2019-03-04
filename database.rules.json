@@ -5,7 +5,7 @@
     "devices": {
       "$did": {
         "name": {
-          ".wrte": true
+          ".write": true
         },
         "desc": {
           ".write": true
