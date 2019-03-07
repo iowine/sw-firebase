@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { of, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-device-edit',
@@ -32,8 +32,19 @@ export class DeviceEditComponent implements OnInit {
       /* Get device ref */
       this.devicesRef = this.db.list(`devices/${this.device}`)
       /* Get device names */
-      this.deviceData = this.devicesRef.snapshotChanges()
-      console.log(this.deviceData)
+      this.devicesRef.snapshotChanges().subscribe(values => {
+        let deviceData = [ "name", "desc" ];
+
+        values.forEach((value, index) => {
+          if (value.key == "name") {
+            deviceData[0] = value.payload.val()
+          } else if (value.key == "desc") {
+            deviceData[1] = value.payload.val()
+          }
+        })        
+
+        this.deviceData = of(deviceData)
+      })
     })
   }
   ngOnDestroy(): void {
