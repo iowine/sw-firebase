@@ -83,7 +83,7 @@ export const deviceHealth: functions.HttpsFunction = functions.https.onRequest(
 
             response.status(200).send()
 
-        })
+        }).catch(console.error)
 
     }
 )
