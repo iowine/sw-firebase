@@ -2,6 +2,10 @@ FROM node:9-alpine
 
 # Take arguments
 ARG firetoken
+ARG commit
+
+# Set arguments
+ENV commit $commit
 
 # Set workdir
 WORKDIR /home/angularapp
