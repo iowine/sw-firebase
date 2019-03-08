@@ -16,6 +16,8 @@ import { DeviceEditComponent } from './device-edit/device-edit.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { PwaComponent } from './pwa/pwa.component';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AngularFireFunctionsModule } from '@angular/fire/functions';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { PwaComponent } from './pwa/pwa.component';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
+    AngularFireMessagingModule,
+    AngularFireFunctionsModule,
     ChartsModule,
     AngularFontAwesomeModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
