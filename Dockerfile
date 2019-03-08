@@ -17,5 +17,7 @@ RUN npm install
 # Bundle source
 COPY . /home/angularapp
 
-RUN npm run build
+# Build & deploy
+RUN node ./git.version.js
+RUN ng build --prod
 RUN firebase deploy --token $firetoken
