@@ -40,7 +40,7 @@ export const deviceHealth: functions.HttpsFunction = functions.https.onRequest(
     (_: functions.Request, response: functions.Response): void => {
         console.log("Health Check starting, getting devices...")
 
-        admin.database().ref('devices').orderByKey().on('value', (snapshot: DataSnapshot): void => {
+        admin.database().ref('devices').orderByKey().once('value').then((snapshot: DataSnapshot): void => {
             console.log("Parent obtained, checking every child...")
 
             const now: number = Date.now()
