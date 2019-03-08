@@ -12,6 +12,7 @@ WORKDIR /home/angularapp
 
 # Install global dependencies
 RUN npm install -g npm@latest
+RUN npm install -g @angular/cli
 RUN npm install -g firebase-tools
 
 # Install dependencies
