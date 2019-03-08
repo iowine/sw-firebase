@@ -1,9 +1,17 @@
 steps:
-# - name: 'gcr.io/cloud-builders/npm'
-#   args: [ 'install' ]
-# - name: 'gcr.io/cloud-builders/npm'
-#   args: [ 'run', 'build' ]
-# - name: 'gcr.io/$PROJECT_ID/firebase'
-#   args: [ 'deploy', '-P', '$PROJECT_ID' ]
-- name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '.', '--build-arg', 'firetoken=$_FIRETOKEN' ]
+ - name: 'gcr.io/cloud-builders/docker'
+   entrypoint: 'bash'
+   args:
+   - '-c'
+   - |
+     docker pull gcr.io/{$PROJECT_ID}/{$_IMAGE}:latest || exit 0
+ - name: 'gcr.io/cloud-builders/docker'
+   args: [ 
+    'build', 
+    '-t', 'gcr.io/{$PROJECT_ID}/{$_IMAGE}:latest',
+    '--cache-from', 'gcr.io/{$PROJECT_ID}/{$_IMAGE}:latest',
+    '--build-arg', 
+    'firetoken={$_FIRETOKEN}',
+    '.'
+   ]
+images: ['gcr.io/{$PROJECT_ID}/{$_IMAGE}:latest']
