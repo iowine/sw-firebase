@@ -18,4 +18,4 @@ RUN npm install
 COPY . /home/angularapp
 
 RUN npm build
-RUN firebase deploy --token firetoken
+RUN firebase deploy --token $firetoken
