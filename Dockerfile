@@ -15,6 +15,8 @@ RUN npm install -g firebase-tools
 # Install dependencies
 COPY package.json ./
 RUN npm install
+COPY functions/package.json ./functions
+RUN cd ./functions && npm install && cd ../
 
 # Bundle source
 COPY . /home/angularapp
