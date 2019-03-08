@@ -4,9 +4,6 @@ FROM node:9-alpine
 ARG firetoken
 ARG commit
 
-# Set arguments
-ENV commit $commit
-
 # Set workdir
 WORKDIR /home/angularapp
 
@@ -21,6 +18,9 @@ RUN npm install
 
 # Bundle source
 COPY . /home/angularapp
+
+# Set arguments
+ENV commit $commit
 
 # Build & deploy
 RUN node ./git.version.js
