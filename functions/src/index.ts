@@ -51,17 +51,17 @@ export const deviceHealth: functions.HttpsFunction = functions.https.onRequest(
                 /* Get latest details */
                 const device = child.key
                 const last: number = child.val().latest.time
-                const diff = (now / 1000) - last
+                const diff = (now / 1000 - last) / 60
                 console.log(`Checking child ${device}`, last, diff)
 
                 /* 30 minute cutoff */
-                if (diff >= 30 * 60) {
+                if (diff >= 30) {
                     console.warn("Device offline.")
 
                     const payload = {
                         notification: {
                             title: `${child.key} has gone offline.`,
-                            body: `Device ${child.key} hasn't been seen for ${diff / 60} minutes.`
+                            body: `Device ${child.key} hasn't been seen for ${diff.toPrecision(2)} minutes.`
                         } /*,
                         webpush: {
                             notification: {
