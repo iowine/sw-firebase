@@ -8,7 +8,7 @@ steps:
   # Build web app
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
-  env: ['commit=$SHORT_SHA']
+  env: ['SHORT_SHA=$SHORT_SHA']
 
   # Install function dependencies
 - name: 'gcr.io/cloud-builders/npm'
