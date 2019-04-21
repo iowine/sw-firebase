@@ -14,14 +14,11 @@
       <li class="nav-item">
         <a routerLink="/device" routerLinkActive="active" class="nav-link" >Devices</a>
       </li>
-      <li class="nav-item">
-        <app-pwa></app-pwa>
-      </li>
+      <app-pwa></app-pwa>
     </ul>
   </div>
 </nav>
 <div class="container">
-    {{ message | async | json }}
     <router-outlet></router-outlet>
     <footer class="footer">
       <div class="container">

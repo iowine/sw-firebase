@@ -13,18 +13,28 @@ export class DeviceEditComponent implements OnInit {
   /* Device name */
   device: String
 
+  /* Database reference */
   db: AngularFireDatabase
 
+  /* Device and data references */
   devicesRef: AngularFireList<any>
   deviceData: Observable<any[]> = new Observable()
 
+  /* Route references */
   private route: ActivatedRoute
   private routeSubscriber: Subscription // For device
 
+  /**
+   * Constructor
+   */
   constructor(route: ActivatedRoute, db: AngularFireDatabase) {
     this.route = route
     this.db = db
   }
+
+  /**
+   * Angular start.
+   */
   ngOnInit() { 
     this.routeSubscriber = this.route.params.subscribe(params => {
       /* Get new device's name */
@@ -47,10 +57,17 @@ export class DeviceEditComponent implements OnInit {
       })
     })
   }
+
+  /**
+   * Angular end.
+   */
   ngOnDestroy(): void {
     this.routeSubscriber.unsubscribe()
   }
 
+  /**
+   * Update device name.
+   */
   onName(value) {
     this
       .db
@@ -58,6 +75,9 @@ export class DeviceEditComponent implements OnInit {
       .update({ name: value })
   }
 
+  /**
+   * Update device description.
+   */
   onDesc(value) {
     this
       .db
