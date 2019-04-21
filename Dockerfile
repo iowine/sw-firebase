@@ -17,7 +17,11 @@ RUN cd ./functions && npm install && cd ../
 # Bundle source
 COPY . /home/angularapp
 
-# Build & deploy
+# Build
+ENV commit = $commit
 RUN node ./git.version.js
 RUN ng build --prod
+
+# Deploy
+ENV firetoken = $firetoken
 RUN firebase deploy --token $firetoken
