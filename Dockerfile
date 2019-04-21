@@ -24,4 +24,4 @@ RUN ng build --prod
 
 # Deploy
 ENV FIREBASE_TOKEN = $FIREBASE_TOKEN
-RUN firebase deploy
+RUN firebase deploy --token $FIREBASE_TOKEN
