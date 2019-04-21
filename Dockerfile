@@ -23,5 +23,6 @@ RUN node ./git.version.js
 RUN ng build --prod
 
 # Deploy
+ARG firetoken
 ENV firetoken = $firetoken
 RUN firebase deploy --token $firetoken
