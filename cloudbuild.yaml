@@ -1,9 +1,19 @@
 # Build & deploy steps
 steps:
+
+  # Install app dependencies
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
+
+  # Build web app
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
   env: ['commit=$SHORT_SHA']
+
+  # Install function dependencies
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['--prefix', "\"functions\"", 'install']
+
+  # Build & deploy functions, deploy app
 - name: 'gcr.io/$PROJECT_ID/firebase'
   args: ['deploy']
