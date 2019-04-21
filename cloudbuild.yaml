@@ -4,16 +4,21 @@ steps:
    entrypoint: 'bash'
    args:
    - '-c'
-   - docker pull gcr.io/$PROJECT_ID/$_IMAGE:latest || exit 0
+   - docker pull gcr.io/$PROJECT_ID/firebase:latest || exit 0
  # Build image with cache
  - name: 'gcr.io/cloud-builders/docker'
    args: [ 
     'build', 
-    '-t', 'gcr.io/$PROJECT_ID/$_IMAGE:latest',
-    '--cache-from', 'gcr.io/$PROJECT_ID/$_IMAGE:latest',
+    '-t', 'gcr.io/$PROJECT_ID/firebase:latest',
+    '--cache-from', 'gcr.io/$PROJECT_ID/firebase:latest',
     '--build-arg', 
-    'firetoken=$_FIRETOKEN',
+    'firetoken=$$FIREBASE_TOKEN',
     'commit=$SHORT_SHA',
     '.'
    ]
-images: ['gcr.io/$PROJECT_ID/$_IMAGE:latest']
+   secretEnv: ['FIREBASE_TOKEN']
+images: ['gcr.io/$PROJECT_ID/firebase:latest']
+secrets:
+- kmsKeyName: projects/$PROJECT_ID/locations/global/keyRings/firebase/cryptoKeys/FIREBASE_DEPLOY_TOKEN
+  secretEnv:
+    FIREBASE_TOKEN: CiQAwVhgiIbTB7oqGGEJZpHaA7tegNCeVCpcNdcsXJWk+b7b7UISIQAGU6JruWXCSNsePgWmfqzcJ4VMpAAIJ1LNMOINSRrINw==
