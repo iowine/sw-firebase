@@ -12,7 +12,7 @@ steps:
 
   # Install function dependencies
 - name: 'gcr.io/cloud-builders/npm'
-  args: ['--prefix', "\"functions\"", 'install']
+  args: ['--prefix', 'functions', 'install']
 
   # Build & deploy functions, deploy app
 - name: 'gcr.io/$PROJECT_ID/firebase'
