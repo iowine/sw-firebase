@@ -1,8 +1,5 @@
 git.version.json
 
-# Node Modules
-functions/node_modules
-
 # Firebase debug logs
 firebase-debug.log
 
