@@ -1,28 +1,6 @@
-const { gitDescribeSync } = require('git-describe')
 const { writeFileSync } = require('fs')
 
-console.log('Getting git commit hash...')
+const versionInfoJson = JSON.stringify({ raw: process.env.SHORT_SHA }, null, 2)
+writeFileSync(`${__dirname}/git.version.json`, versionInfoJson)
 
-try {
-  
-  const gitInfo = gitDescribeSync()
-  
-  const versionInfoJson = JSON.stringify(gitInfo, null, 2)
-
-  writeFileSync(`${__dirname}/git.version.json`, versionInfoJson)
-  
-  console.log(`Using local commit ${gitInfo.raw}`)
-  
-} catch (e) {
-  
-  const gitInfo = {
-    raw: process.env.commit
-  }
-  
-  const versionInfoJson = JSON.stringify(gitInfo, null, 2)
-
-  writeFileSync(`${__dirname}/git.version.json`, versionInfoJson)
-  
-  console.log(`Using Cloud Build commit ${gitInfo.raw}`)
-  
-}
+console.log(`Using commit ${gitInfo.raw}`)  
