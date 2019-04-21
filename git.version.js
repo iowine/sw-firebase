@@ -9,7 +9,7 @@ try {
   
   const versionInfoJson = JSON.stringify(gitInfo, null, 2)
 
-  writeFileSync('git.version.json', versionInfoJson)
+  writeFileSync(`${__dirname}/git.version.json`, versionInfoJson)
   
   console.log(`Using local commit ${gitInfo.raw}`)
   
@@ -21,7 +21,7 @@ try {
   
   const versionInfoJson = JSON.stringify(gitInfo, null, 2)
 
-  writeFileSync('git.version.json', versionInfoJson)
+  writeFileSync(`${__dirname}/git.version.json`, versionInfoJson)
   
   console.log(`Using Cloud Build commit ${gitInfo.raw}`)
   
