@@ -2,7 +2,7 @@
   "name": "iowine",
   "version": "1.13.0",
   "scripts": {
-    "build": "COMMIT=%SHORT_SHA% node ./git.version.js && ng build --prod",
+    "build": "node ./git.version.js && ng build --prod",
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",

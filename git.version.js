@@ -1,6 +1,7 @@
 const { writeFileSync } = require('fs')
 
-const versionInfoJson = JSON.stringify({ raw: process.env.COMMIT }, null, 2)
-writeFileSync(`${__dirname}/git.version.json`, versionInfoJson)
+const commit = process.env.SHORT_SHA || 'N/A'
+console.log(`Using commit ${commit}`)  
 
-console.log(`Using commit ${versionInfoJson.raw}`)  
+const info = JSON.stringify({ raw: commit }, null, 2)
+writeFileSync(`${__dirname}/git.version.json`, info)
