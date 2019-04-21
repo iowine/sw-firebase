@@ -25,5 +25,4 @@ RUN ng build --prod
 
 # Deploy
 ARG firetoken
-ENV FIREBASE_TOKEN = $firetoken
-RUN firebase deploy
+RUN firebase deploy --token $firetoken
