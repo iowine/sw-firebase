@@ -1,13 +1,3 @@
-# Deployment key
-secrets:
-- kmsKeyName: projects/iowine-cloud/locations/global/keyRings/firebase/cryptoKeys/FIREBASE_DEPLOY_TOKEN
-  secretEnv:
-    FIREBASE_TOKEN: |-
-      CiQAwVhgiFVf1yAQ5npEEticVA2yhMJ/Tirw/+rty/xxUFsX3YwSVgAGU6JrBtB7mbFDeUBhOol4
-      YGpt8x+z4ceuGNLInoeCRzbUaRBGtbwhHsfshPGD5GCPOUh5FLe2k/ddCfKiH/Cgd661iZWzBGXb
-      TomnNFQTH9pTN7DB
-
-
 # Build & deploy steps
 steps:
 - name: 'gcr.io/cloud-builders/npm'
@@ -16,6 +6,3 @@ steps:
   args: ['run', 'build']
 - name: 'gcr.io/$PROJECT_ID/firebase'
   args: ['deploy']
-  secretEnv: [
-    'FIREBASE_TOKEN'
-  ]
