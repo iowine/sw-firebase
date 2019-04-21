@@ -4,12 +4,12 @@
   },
   "functions": {
     "predeploy": [
-      "npm --prefix \"%RESOURCE_DIR%\" run lint",
-      "npm --prefix \"%RESOURCE_DIR%\" run build"
+      "npm --prefix \"functions\" run lint",
+      "npm --prefix \"functions\" run build"
     ]
   },
   "hosting": {
-    "public": "dist/iowine",
+    "public": "./dist/iowine",
     "rewrites": [
       {
         "source": "**",

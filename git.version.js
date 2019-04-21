@@ -1,7 +1,7 @@
-const { gitDescribeSync } = require('git-describe');
-const { writeFileSync } = require('fs');
+const { writeFileSync } = require('fs')
 
-const gitInfo = gitDescribeSync();
-const versionInfoJson = JSON.stringify(gitInfo, null, 2);
+const commit = process.env.SHORT_SHA || 'N/A'
+console.log(`Using commit ${commit}`)  
 
-writeFileSync('git.version.json', versionInfoJson);
+const info = JSON.stringify({ raw: commit }, null, 2)
+writeFileSync(`${__dirname}/git.version.json`, info)
