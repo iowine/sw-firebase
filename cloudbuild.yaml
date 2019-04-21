@@ -8,20 +8,21 @@ steps:
  # Build image with cache
  - name: 'gcr.io/cloud-builders/docker'
    args: [ 
-     'build', 
-     '-t', 'gcr.io/$PROJECT_ID/firebase:latest',
-     '--cache-from', 'gcr.io/$PROJECT_ID/firebase:latest',
-     '.'
+    'build', '-t', 'gcr.io/$PROJECT_ID/firebase:latest',
+    '--cache-from', 'gcr.io/$PROJECT_ID/firebase:latest',
+    '.'
    ]
    env: [
-      'commit=$SHORT_SHA',
-      'FIREBASE_TOKEN=$$FIREBASE_TOKEN'
+    'commit=$SHORT_SHA',
    ]
    secretEnv: [
-      'FIREBASE_TOKEN'
+    'FIREBASE_TOKEN'
    ]
 images: ['gcr.io/$PROJECT_ID/firebase:latest']
 secrets:
 - kmsKeyName: projects/iowine-cloud/locations/global/keyRings/firebase/cryptoKeys/FIREBASE_DEPLOY_TOKEN
   secretEnv:
-    FIREBASE_TOKEN: CiQAwVhgiBMkMCnQ6rX3kldlOKW7Gii97+TEIPnNvYhFmBLI+CUSVgAGU6JrDS7bu5grLfa3BHT42cuJoLyaFufC9xnQgRwkCvgZ9flT6hQv1OlG+xZKYp/WBTVuB2SjgeJ9C9/GxMDGw+4kV6p6Gbv1vKO+Wqb+L90IKysa
+    FIREBASE_TOKEN: |-
+     CiQAwVhgiFVf1yAQ5npEEticVA2yhMJ/Tirw/+rty/xxUFsX3YwSVgAGU6JrBtB7mbFDeUBhOol4
+     YGpt8x+z4ceuGNLInoeCRzbUaRBGtbwhHsfshPGD5GCPOUh5FLe2k/ddCfKiH/Cgd661iZWzBGXb
+     TomnNFQTH9pTN7DB
