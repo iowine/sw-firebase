@@ -20,4 +20,4 @@ images: ['gcr.io/$PROJECT_ID/firebase:latest']
 secrets:
 - kmsKeyName: projects/iowine-cloud/locations/global/keyRings/firebase/cryptoKeys/FIREBASE_DEPLOY_TOKEN
   secretEnv:
-    FIREBASE_TOKEN: CiQAwVhgiIbTB7oqGGEJZpHaA7tegNCeVCpcNdcsXJWk+b7b7UISIQAGU6JruWXCSNsePgWmfqzcJ4VMpAAIJ1LNMOINSRrINw==
+    FIREBASE_TOKEN: CiQAwVhgiBMkMCnQ6rX3kldlOKW7Gii97+TEIPnNvYhFmBLI+CUSVgAGU6JrDS7bu5grLfa3BHT42cuJoLyaFufC9xnQgRwkCvgZ9flT6hQv1OlG+xZKYp/WBTVuB2SjgeJ9C9/GxMDGw+4kV6p6Gbv1vKO+Wqb+L90IKysa
