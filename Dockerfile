@@ -18,6 +18,7 @@ RUN cd ./functions && npm install && cd ../
 COPY . /home/angularapp
 
 # Build
+ARG commit
 ENV commit = $commit
 RUN node ./git.version.js
 RUN ng build --prod

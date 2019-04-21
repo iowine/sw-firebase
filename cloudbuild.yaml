@@ -11,10 +11,8 @@ steps:
     'build', '-t', 'gcr.io/$PROJECT_ID/firebase:latest',
     '--cache-from', 'gcr.io/$PROJECT_ID/firebase:latest',
     '--build-arg', 'firetoken=$$FIREBASE_TOKEN',
+    '--build-arg', 'commit=$SHORT_SHA',
     '.'
-   ]
-   env: [
-    'commit=$SHORT_SHA'
    ]
    secretEnv: [
     'FIREBASE_TOKEN'
