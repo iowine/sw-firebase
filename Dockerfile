@@ -20,4 +20,4 @@ COPY . /home/angularapp
 # Build & deploy
 RUN node ./git.version.js
 RUN ng build --prod
-RUN firebase deploy --token $FIREBASE_TOKEN
+RUN firebase deploy --token $firetoken

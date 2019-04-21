@@ -14,7 +14,8 @@ steps:
      '.'
    ]
    env: [
-      'commit=$SHORT_SHA'
+      'commit=$SHORT_SHA',
+      'firetoken=$$FIREBASE_TOKEN'
    ]
    secretEnv: [
       'FIREBASE_TOKEN'
