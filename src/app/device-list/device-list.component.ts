@@ -10,15 +10,23 @@ import { map } from 'rxjs/operators';
 })
 export class DeviceListComponent implements OnInit {
 
+  /* Database reference */
   db: AngularFireDatabase
 
+  /* Device reference */
   devicesRef: AngularFireList<any>
   devices: Observable<any[]> = new Observable()
 
+  /**
+   * Constructor
+   */
   constructor(db: AngularFireDatabase) {
     this.db = db
   }
 
+  /**
+   * Angular start.
+   */
   ngOnInit() { 
     /* Get device ref */
     this.devicesRef = this.db.list('devices')
@@ -26,6 +34,9 @@ export class DeviceListComponent implements OnInit {
     this.devices = this.devicesRef.snapshotChanges()
   }
 
+  /**
+   * Prevent events.
+   */
   stop(event: Event) {
     event.stopPropagation()
   }

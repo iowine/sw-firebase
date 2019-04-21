@@ -11,6 +11,8 @@ import * as _ from 'lodash';
   styleUrls: ['./device-view.component.sass']
 })
 export class DeviceViewComponent implements OnInit {
+
+  /** Chart references */
   @ViewChildren(BaseChartDirective)
   private charts: QueryList<BaseChartDirective>
 

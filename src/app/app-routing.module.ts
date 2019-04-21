@@ -5,6 +5,7 @@ import { DeviceListComponent } from './device-list/device-list.component';
 import { HomeComponent } from './home/home.component';
 import { DeviceEditComponent } from './device-edit/device-edit.component';
 
+/* Double pane route */
 const desktop_routes: Routes = [
   {
     path: '',
@@ -26,6 +27,7 @@ const desktop_routes: Routes = [
   }
 ];
 
+/* Mobile routes */
 const mobile_routes: Routes = [
   {
     path: '',
@@ -51,6 +53,9 @@ const mobile_routes: Routes = [
 })
 export class AppRoutingModule {
 
+  /**
+   * Discriminate route based on device size.
+   */
    constructor(router: Router) {
     if (window.innerWidth < 768) router.resetConfig(mobile_routes)
   }
