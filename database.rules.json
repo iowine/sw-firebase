@@ -1,0 +1,34 @@
+{
+  "rules": {
+
+    // Block reads by default
+    ".read": false,
+    ".write": false,
+
+    "devices": {
+
+      "$did": {
+
+        // Allows assigned reads
+        ".read": "root.child('users/' + auth.uid + '/' + $did).exists()",
+
+        "name": {
+          ".write": true
+        },
+        "desc": {
+          ".write": true
+        },
+        "alerts": {
+          ".write": true
+        }
+      }
+    },
+
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid"
+      }
+    }
+
+  }
+}

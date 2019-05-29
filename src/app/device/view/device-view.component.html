@@ -1,0 +1,46 @@
+<div class="col" *ngIf="deviceData | async as deviceData; else loading">
+	<!-- Graphs -->
+	<div class="row">
+		<canvas baseChart
+			height="350px"
+			[chartType]="chartType"
+			[options]="temperatureOptions"
+			[datasets]="temperatureData"
+			[colors]="temperatureColors">
+		</canvas>
+	</div>
+	<div class="row">
+		<canvas baseChart
+			height="350px"
+			[chartType]="chartType"
+			[options]="humidityOptions"
+			[datasets]="humidityData"
+			[colors]="humidityColors">
+		</canvas>
+	</div>
+	<div class="row controls">
+		<!-- Controls -->
+		<span class="hint">View: </span>
+		<button class="btn btn-light" 
+		[routerLink]="['/device/view', device]" 
+		[queryParams]="{ mode: mode.value }"
+		*ngFor="let mode of modes"
+		queryParamsHandling="merge">
+			{{ mode.text }} Mode
+		</button>
+	</div>
+	<div class="row controls">
+		<!-- Controls -->
+		<span class="hint">Time: </span>
+		<button class="btn btn-light" 
+		[routerLink]="['/device/view', device]" 
+		[queryParams]="{ scale: scale.value }"
+		*ngFor="let scale of scales"
+		queryParamsHandling="merge">
+			Last {{ scale.text }}
+		</button>
+	</div>
+</div>
+<ng-template #loading>
+	<app-loading></app-loading>
+</ng-template>

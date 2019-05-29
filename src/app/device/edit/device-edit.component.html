@@ -1,0 +1,21 @@
+<div class="col" *ngIf="deviceData | async as deviceData; else loading">
+  <!-- Form -->
+  <h3>Edit device {{ device }}</h3>
+  <small>Enter to save.</small>
+  <br>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon1">Name</span>
+    </div>
+    <input type="text" #name (keyup.enter)="onName(name.value)" value="{{ deviceData[0] }}" class="form-control" placeholder="Device name" aria-label="Name" aria-describedby="basic-addon1">
+  </div>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon1">Description</span>
+    </div>
+    <input type="text" #desc (keyup.enter)="onDesc(desc.value)" value="{{ deviceData[1] }}" (keyup)="onName(box.value)" class="form-control" placeholder="Device description" aria-label="Description" aria-describedby="basic-addon1">
+  </div>
+</div>
+<ng-template #loading>
+	<app-loading></app-loading>
+</ng-template>

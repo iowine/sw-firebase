@@ -1,0 +1,61 @@
+<!-- Navbar -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+
+  <!-- Brand -->
+  <a class="navbar-brand" routerLink="/">
+      <img width="25" alt="{{ title }} Logo" src="https://avatars1.githubusercontent.com/u/43112612">
+      {{ title }}
+  </a>
+
+  <!-- Mobile toggle -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Links -->
+  <div class="collapse navbar-collapse" id="navbarNav">
+
+    <!-- West side -->
+    <ul class="nav navbar-nav mr-auto">
+
+      <!-- Home -->
+      <li class="nav-item active">
+        <a routerLink="/" routerLinkActive="active" class="nav-link">Home <span class="sr-only">(current)</span></a>
+      </li>
+
+      <!-- Device list -->
+      <li class="nav-item">
+        <a routerLink="/device" routerLinkActive="active" class="nav-link" >Devices</a>
+      </li>
+
+    </ul>
+
+    <!-- East side -->
+    <div class="navbar-text d-inline">
+
+      <!-- PWA features -->
+      <app-pwa></app-pwa>
+
+      <!-- Auth features -->
+      <app-auth></app-auth>
+
+    </div>
+
+  </div>
+  
+</nav>
+
+<!-- Body -->
+<div class="container">
+
+  <!-- Application -->  
+  <router-outlet></router-outlet>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <span class="text-muted">{{ title }}, v{{ version }}-{{ hash }}</span>
+    </div>
+  </footer>
+
+</div>
