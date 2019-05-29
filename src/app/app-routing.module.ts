@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, Router } from '@angular/router';
-import { DeviceViewComponent } from './device-view/device-view.component';
-import { DeviceListComponent } from './device-list/device-list.component';
-import { HomeComponent } from './home/home.component';
-import { DeviceEditComponent } from './device-edit/device-edit.component';
+import { DeviceViewComponent } from './device/view/device-view.component';
+import { DeviceListComponent } from './device/list/device-list.component';
+import { HomeComponent } from './utils/home/home.component';
+import { DeviceEditComponent } from './device/edit/device-edit.component';
 
 /* Double pane route */
 const desktop_routes: Routes = [

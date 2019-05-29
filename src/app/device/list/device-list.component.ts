@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-device-list',
@@ -10,9 +10,6 @@ import { map } from 'rxjs/operators';
 })
 export class DeviceListComponent implements OnInit {
 
-  /* Database reference */
-  db: AngularFireDatabase
-
   /* Device reference */
   devicesRef: AngularFireList<any>
   devices: Observable<any[]> = new Observable()
@@ -20,25 +17,21 @@ export class DeviceListComponent implements OnInit {
   /**
    * Constructor
    */
-  constructor(db: AngularFireDatabase) {
-    this.db = db
-  }
+  constructor(
+    private db: AngularFireDatabase,
+    private afAuth: AngularFireAuth
+  ) {  }
 
   /**
    * Angular start.
    */
   ngOnInit() { 
-    /* Get device ref */
-    this.devicesRef = this.db.list('devices')
-    /* Get device names */
-    this.devices = this.devicesRef.snapshotChanges()
-  }
-
-  /**
-   * Prevent events.
-   */
-  stop(event: Event) {
-    event.stopPropagation()
+    this.afAuth.user.subscribe((user) => {
+      /* Get device ref */
+      this.devicesRef = this.db.list(`users/${user.uid}`)
+      /* Get device names */
+      this.devices = this.devicesRef.snapshotChanges()
+    });
   }
 
 }
