@@ -1,6 +1,6 @@
 {
   "name": "iowine",
-  "version": "1.13.1",
+  "version": "2.0.0",
   "scripts": {
     "build": "node ./git.version.js && ng build --prod",
     "ng": "ng",
