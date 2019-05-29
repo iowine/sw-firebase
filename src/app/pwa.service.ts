@@ -49,7 +49,7 @@ export class PwaService {
         this.sub('health')
       },
       (err) => {
-        console.error('Unable to get permission to notify.', err);
+        console.log('Unable to get permission to notify.', err);
       }
     );
   }
