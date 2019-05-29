@@ -18,6 +18,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { PwaComponent } from './pwa/pwa.component';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireFunctionsModule } from '@angular/fire/functions';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { AngularFireFunctionsModule } from '@angular/fire/functions';
     LoadingComponent,
     DeviceEditComponent,
     TimeAgoPipe,
-    PwaComponent
+    PwaComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,
