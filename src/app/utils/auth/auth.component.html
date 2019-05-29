@@ -2,10 +2,11 @@
 
     <!-- Authenticated -->
     <button class="btn btn-dark navbar-btn" (click)="logout()">Logout</button>
+    <img alt="Avatar" class="avatar" src="{{ user.photoURL }}"/>
     
 </ng-container>
 
 <!-- Login -->
 <ng-template #showLogin>
-    <button class="btn btn-danger navbar-btn" (click)="login()">Login with Google</button>
+    <button class="btn btn-dark navbar-btn" (click)="login()">Login with Google</button>
 </ng-template>
