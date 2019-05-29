@@ -1,0 +1,42 @@
+<div class="nounderline" [routerLink]="['view', device.key]" routerLinkActive="active">
+
+    <div *ngIf="fullDevice | async as fullDevice; else simple">
+    
+      <h2>
+        {{ fullDevice.payload.val().name || fullDevice.key }}
+        <a class="edit pull-right" [routerLink]="['edit', device.key]" (click)="stop($event)"  >
+          <fa name="cog"></fa>
+        </a>
+      </h2>
+      <section>
+        {{ fullDevice.payload.val().desc  }}
+      </section>
+      <section>
+        <small>
+          Last seen: 
+          {{ fullDevice.payload.val().latest.time * 1000 | timeAgo }}
+        </small>
+        <br>
+        <small>
+          Last data:
+          {{ fullDevice.payload.val().latest.data.temperature.toFixed(2) }}&deg;C /
+          {{ fullDevice.payload.val().latest.data.humidity.toFixed(2) }}%
+        </small>
+      </section>
+    
+    </div>
+    
+    <ng-template #simple>
+    
+      <h2>
+        {{ device.key }}
+        <a class="edit pull-right" [routerLink]="['edit', device.key]" (click)="stop($event)"  >
+          <fa name="cog"></fa>
+        </a>
+      </h2>
+    
+      <app-loading></app-loading>
+      
+    </ng-template>
+
+</div>

@@ -1,0 +1,29 @@
+<!-- Display once devices available -->
+<div class="row" *ngIf="devices | async as devices; else loading">
+
+  <!-- Left side device list -->
+  <div class="col-sm-4" >
+    
+    <!-- If devices exist -->
+    <ng-container *ngIf="devices.length; else noDevices">
+      
+      <div class="device" *ngFor="let device of devices">
+        <app-preview [device]="device"></app-preview>
+      </div>
+
+    </ng-container>
+
+    <!-- Otherwise no devices -->
+    <ng-template #noDevices>No devices yet!</ng-template>
+
+  </div>
+
+  <!-- Right side device view -->
+  <div class="col-md-8">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>
+
+<!-- Loading placeholder -->
+<ng-template #loading><app-loading></app-loading></ng-template>
