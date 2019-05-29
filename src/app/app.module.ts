@@ -18,6 +18,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { PwaComponent } from './pwa/pwa.component';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireFunctionsModule } from '@angular/fire/functions';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
@@ -39,6 +40,7 @@ import { AuthComponent } from './auth/auth.component';
     AngularFireDatabaseModule,
     AngularFireMessagingModule,
     AngularFireFunctionsModule,
+    AngularFireAuthModule,
     ChartsModule,
     AngularFontAwesomeModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
