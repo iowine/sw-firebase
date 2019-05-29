@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PwaService } from '../pwa.service';
+import { PwaService } from '../../pwa.service';
 
 @Component({
   selector: 'app-pwa',
