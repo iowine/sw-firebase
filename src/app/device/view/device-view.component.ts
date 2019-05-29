@@ -28,6 +28,7 @@ export class DeviceViewComponent implements OnInit {
   device: String
   /* How many hours to show */
   DEFAULT_CUTOFF = 6
+  MAX_CUTOFF = 720
   private scales = [
     { text: "hour",     value: 1 },
     { text: "6 hours",  value: 6 },
@@ -125,7 +126,7 @@ export class DeviceViewComponent implements OnInit {
       /* Get new devices' ref */
       this.deviceData = this.db.list(
         `devices/${this.device}/data`, 
-        ref => ref.orderByChild('time')
+        ref => ref.orderByChild('time').limitToLast(this.MAX_CUTOFF * 4)
       ).valueChanges()
       /* Subscribe to new device's data */
       this.dataSubscriber = this.deviceData.subscribe(data => {
