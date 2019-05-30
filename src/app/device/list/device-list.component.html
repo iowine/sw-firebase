@@ -7,7 +7,7 @@
     <!-- If devices exist -->
     <ng-container *ngIf="devices.length; else noDevices">
       
-      <div class="device" *ngFor="let device of devices">
+      <div class="device nounderline" *ngFor="let device of devices" [routerLink]="['view', device.key]" routerLinkActive="active">
         <app-preview [device]="device"></app-preview>
       </div>
 
