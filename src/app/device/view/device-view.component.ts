@@ -45,6 +45,7 @@ export class DeviceViewComponent implements OnInit {
   ]
   /* Device data observable required to show graph */
   deviceData: Observable<any[]> = new Observable()
+  deviceMeta: Observable<any> = new Observable()
   displayMode: String
   lastHours: number
 
@@ -128,6 +129,8 @@ export class DeviceViewComponent implements OnInit {
         `devices/${this.device}/data`, 
         ref => ref.orderByChild('time').limitToLast(this.MAX_CUTOFF * 4)
       ).valueChanges()
+      /* Get device meta */
+      this.deviceMeta = this.db.object(`devices/${this.device}`).snapshotChanges()
       /* Subscribe to new device's data */
       this.dataSubscriber = this.deviceData.subscribe(data => {
         this.filterUpdate(data)

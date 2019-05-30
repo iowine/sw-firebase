@@ -1,4 +1,8 @@
 <div class="col" *ngIf="deviceData | async as deviceData; else loading">
+	<h1 *ngIf="deviceMeta | async as deviceMeta; else loading">
+		{{ deviceMeta.payload.val().name }} Data
+	</h1>
+	<pre>{{ device }}</pre>
 	<!-- Graphs -->
 	<div class="row">
 		<canvas baseChart
